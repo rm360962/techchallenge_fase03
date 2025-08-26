@@ -1,10 +1,15 @@
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Input from '../components/Input.tsx';
 import Button from '../components/Button.tsx';
+import { LoginService } from '../service/login.service.js';
+import { TPageProps } from '../types/TPage.ts';
+import { TipoAlerta } from '../types/TAlert.ts';
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = (props: TPageProps) => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
+	const [service, setService] = useState(new LoginService());
 
 	const logarUsuario = async (event: FormEvent) => {
 		event.preventDefault();
@@ -15,6 +20,25 @@ const Login = () => {
 			form.classList.add('was-validated')
 			return;
 		}
+
+		const { erro, usuarioLogado, token } = await service.logarUsuario({
+			usuario,
+			senha
+		});
+
+		if (erro) {
+			props.adcionarAlerta({
+				tipo: TipoAlerta.Erro,
+				mensagem: erro,
+			});
+			return;
+		}
+
+		localStorage.setItem('token', token);
+		props.setUsuarioLogado?.(usuarioLogado);
+		
+		const navegador = useNavigate();
+		navegador("/");
 	};
 
 	return (
