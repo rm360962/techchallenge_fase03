@@ -10,7 +10,8 @@ const Login = (props: TPageProps) => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
 	const [service, setService] = useState(new LoginService());
-
+	const navegador = useNavigate();
+	
 	const logarUsuario = async (event: FormEvent) => {
 		event.preventDefault();
 
@@ -37,7 +38,6 @@ const Login = (props: TPageProps) => {
 		localStorage.setItem('token', token);
 		props.setUsuarioLogado?.(usuarioLogado);
 		
-		const navegador = useNavigate();
 		navegador("/");
 	};
 

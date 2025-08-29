@@ -9,7 +9,7 @@ export class LoginService {
         try {
             const resposta = await conexaoApi({
                 method: 'get',
-                url: '/usuario/login',
+                url: '/users/login',
                 headers: {
                     'Authorization': autenticacaoBase64,
                 },
