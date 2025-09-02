@@ -1,5 +1,5 @@
 export type TPageProps = {
     usuarioLogado?: any,
-    setUsuarioLogado?: Function,
+    setSessao?: Function,
     adcionarAlerta: Function,
 };

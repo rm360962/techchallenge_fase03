@@ -3,16 +3,43 @@ import Home from "./pages/Home.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import Alert from "./components/Alert.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TAlertProps } from "./types/TAlert.ts";
+import { TSession } from "./types/TSession.ts";
 
 function App() {
-  const [usuarioLogado, setUsuarioLogado] = useState(null);
+  const [sessao, setSessao] = useState({} as TSession);
   const [alertas, setAlertas] = useState([] as TAlertProps[]);
 
   const style = {
-    background: 'linear-gradient(to bottom, white, lightblue)'
+    background: 'linear-gradient(to bottom, white, lightblue)',
+    padding: '0'
   };
+
+  useEffect(() => {
+    const tokenJwt = localStorage.getItem('token');
+
+    if(!tokenJwt) {
+      return;
+    }
+
+    try {
+      const payload = JSON.parse(atob(tokenJwt.split('.')[1]));
+      const expiracao = payload.exp;
+      const dataAtualSegundos = Date.now() / 1000;
+
+      if(dataAtualSegundos < expiracao) {
+        setSessao({
+          usuarioLogado: {
+            ...payload
+          },
+          token: tokenJwt,
+        });
+      }
+    } catch(erro) {
+      console.log("Erro ao decodificar o token:", erro);
+    }
+  }, []);
 
   const adcionarAlerta = (alerta: TAlertProps) => {
     alerta.id = Date.now().toString();
@@ -44,10 +71,10 @@ function App() {
         <Routes>
           <Route path="/login" element={
             <Login
-              setUsuarioLogado={setUsuarioLogado}
+              setSessao={setSessao}
               adcionarAlerta={adcionarAlerta} />} />
           <Route path="/" element={
-            <ProtectedRoute usuarioLogado={usuarioLogado}>
+            <ProtectedRoute usuarioLogado={sessao.usuarioLogado}>
               <Home />
             </ProtectedRoute>} />
         </Routes>

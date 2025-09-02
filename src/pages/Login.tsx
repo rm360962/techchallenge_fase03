@@ -36,7 +36,10 @@ const Login = (props: TPageProps) => {
 		}
 
 		localStorage.setItem('token', token);
-		props.setUsuarioLogado?.(usuarioLogado);
+		props.setSessao?.({
+			usuarioLogado: usuarioLogado,
+			token: token,
+		});
 		
 		navegador("/");
 	};
