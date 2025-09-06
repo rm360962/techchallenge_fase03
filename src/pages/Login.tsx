@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Login = (props: TPageProps) => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
+	const [carregando, setCarregando] = useState(false);
 	const [service, setService] = useState(new LoginService());
 	const navegador = useNavigate();
 	
@@ -22,10 +23,14 @@ const Login = (props: TPageProps) => {
 			return;
 		}
 
-		const { erro, usuarioLogado, token } = await service.logarUsuario({
+		setCarregando(true);
+
+		const { erro, usuarioLogado, tokenJwt } = await service.logarUsuario({
 			usuario,
 			senha
 		});
+
+		setCarregando(false);
 
 		if (erro) {
 			props.adcionarAlerta({
@@ -35,13 +40,13 @@ const Login = (props: TPageProps) => {
 			return;
 		}
 
-		localStorage.setItem('token', token);
+		localStorage.setItem('token', tokenJwt);
 		props.setSessao?.({
 			usuarioLogado: usuarioLogado,
-			token: token,
+			token: tokenJwt,
 		});
 		
-		navegador("/");
+		navegador('/');
 	};
 
 	return (
@@ -79,7 +84,7 @@ const Login = (props: TPageProps) => {
 						</div>
 					</div>
 					<div className='d-flex justify-content-center'>
-						<Button title="Precione para entrar no sistema (Atalho: ENTER)">Entrar</Button>
+						<Button titulo="Precione para entrar no sistema (Atalho: ENTER)" carregando={carregando}>Entrar</Button>
 					</div>
 				</form>
 			</div>

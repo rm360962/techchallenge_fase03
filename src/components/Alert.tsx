@@ -5,6 +5,11 @@ const Alert = (props: TAlertProps) => {
     const [visivel, setVisivel] = useState(true);
     const [opacidade, setOpacidade] = useState(1);
     const className = `alert alert-${props.tipo}`;
+    const estiloAlerta = {
+        minWidth: '200px',
+        opacity: opacidade,
+        transition: 'opacity 0.6s'
+    };
 
     useEffect(() => {
         let alertaRemovido = false;
@@ -30,7 +35,7 @@ const Alert = (props: TAlertProps) => {
     return (
         <>
             {visivel && (
-                <div className={className} style={{ minWidth: '200px', opacity: opacidade, transition: 'opacity 0.6s' }} role="alert">
+                <div className={className} style={estiloAlerta} role="alert">
                     {props.mensagem}
                 </div>
             )}

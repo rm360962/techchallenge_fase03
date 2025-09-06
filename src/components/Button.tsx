@@ -1,12 +1,29 @@
-const Button = (props) => {
+import { TButtonProps } from "../types/TButton";
+
+const Button = (props: TButtonProps) => {
+	const estiloBotao = {
+		minWidth: '90px',
+		minHeight: '40px',
+		...props.style
+	};
+
+	const estiloLoader = { 
+		width: '20px', 
+		height: '20px' 
+	};
+
 	return (
 		<div>
-			<button 
+			<button
 				className='btn btn-primary'
-				type={props.type ?? 'submit'}
-				title={props.title}
-				>
-				{props.children}
+				type={props.tipo ?? 'submit'}
+				title={props.titulo}
+				style={estiloBotao}
+				disabled={props.carregando}
+			>
+				{props.carregando ?
+					(<span className="spinner-border spinner-border-sm" style={estiloLoader} role="status" aria-hidden="true" />) :
+					(props.children)}
 			</button>
 		</div>
 	);

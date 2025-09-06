@@ -16,6 +16,7 @@ export class LoginService {
             });
 
             if(resposta.status === 200) {
+                console.log(resposta.data);
                 return {
                     erro: null,
                     tokenJwt: resposta.data?.token,

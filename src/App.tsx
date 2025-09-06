@@ -1,34 +1,39 @@
-import Login from "./pages/Login.tsx";
-import Home from "./pages/Home.tsx";
-import ProtectedRoute from "./components/ProtectedRoute.tsx";
-import Alert from "./components/Alert.tsx";
+import Login from "./pages/Login.js";
+import Home from "./pages/Home.js";
+import ProtectedRoute from "./components/ProtectedRoute.js";
+import Alert from "./components/Alert.js";
+import imagemFundo from './assets/bg-ia-generated.png';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { TAlertProps } from "./types/TAlert.ts";
-import { TSession } from "./types/TSession.ts";
+import { TAlertProps } from "./types/TAlert.js";
+import { TSession } from "./types/TSession.js";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
   const [alertas, setAlertas] = useState([] as TAlertProps[]);
+  const [carregando, setCarregando] = useState(true);
 
   const style = {
-    background: 'linear-gradient(to bottom, white, lightblue)',
+    backgroundImage: `url(${imagemFundo})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     padding: '0'
   };
 
   useEffect(() => {
-    const tokenJwt = localStorage.getItem('token');
-
-    if(!tokenJwt) {
-      return;
-    }
-
     try {
+      const tokenJwt = localStorage.getItem('token');
+
+      if (tokenJwt == null || tokenJwt.length === 0) {
+        return;
+      }
+
       const payload = JSON.parse(atob(tokenJwt.split('.')[1]));
       const expiracao = payload.exp;
       const dataAtualSegundos = Date.now() / 1000;
 
-      if(dataAtualSegundos < expiracao) {
+      if (dataAtualSegundos < expiracao) {
         setSessao({
           usuarioLogado: {
             ...payload
@@ -36,8 +41,10 @@ function App() {
           token: tokenJwt,
         });
       }
-    } catch(erro) {
+    } catch (erro) {
       console.log("Erro ao decodificar o token:", erro);
+    } finally {
+      setCarregando(false);
     }
   }, []);
 
@@ -57,6 +64,10 @@ function App() {
       return ultimoIndice ? [] : prevAlertas;
     });
   };
+
+  if (carregando) {
+    return (<></>)
+  }
 
   return (
     <div className="container-fluid vh-100" style={style}>
