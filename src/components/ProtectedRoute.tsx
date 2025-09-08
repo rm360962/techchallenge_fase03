@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ usuarioLogado, children }) => {  
-  if (!usuarioLogado) {
+const ProtectedRoute = ({ sessao, children }) => {
+  if (!sessao.token) {
     return <Navigate to="/login" replace />;
   }
 

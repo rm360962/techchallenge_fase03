@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Input from '../components/Input.tsx';
 import Button from '../components/Button.tsx';
 import { LoginService } from '../service/login.service.js';
@@ -10,9 +10,16 @@ const Login = (props: TPageProps) => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
 	const [carregando, setCarregando] = useState(false);
+	const [loginRealizado, setLoginRealizado] = useState(false);
 	const [service, setService] = useState(new LoginService());
 	const navegador = useNavigate();
 	
+	useEffect(() => {
+		if(loginRealizado) {
+			navegador('/');
+		}
+	}, [loginRealizado]);
+
 	const logarUsuario = async (event: FormEvent) => {
 		event.preventDefault();
 
@@ -41,12 +48,17 @@ const Login = (props: TPageProps) => {
 		}
 
 		localStorage.setItem('token', tokenJwt);
+
+		const dataAtualSegundos = Math.floor(Date.now() / 1000);
+        const umaHoraSegundos = 3600;
+
 		props.setSessao?.({
 			usuarioLogado: usuarioLogado,
 			token: tokenJwt,
+			expiracao: dataAtualSegundos + umaHoraSegundos
 		});
 		
-		navegador('/');
+		setLoginRealizado(true);
 	};
 
 	return (

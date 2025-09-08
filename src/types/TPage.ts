@@ -1,5 +1,7 @@
+import { TSession } from "./TSession";
+
 export type TPageProps = {
-    usuarioLogado?: any,
+    sessao: TSession,
     setSessao?: Function,
     adcionarAlerta: Function,
 };

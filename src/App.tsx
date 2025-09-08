@@ -39,6 +39,7 @@ function App() {
             ...payload
           },
           token: tokenJwt,
+          expiracao: expiracao,
         });
       }
     } catch (erro) {
@@ -82,11 +83,14 @@ function App() {
         <Routes>
           <Route path="/login" element={
             <Login
+              sessao={{} as TSession}
               setSessao={setSessao}
               adcionarAlerta={adcionarAlerta} />} />
           <Route path="/" element={
-            <ProtectedRoute usuarioLogado={sessao.usuarioLogado}>
-              <Home />
+            <ProtectedRoute sessao={sessao}>
+              <Home
+                sessao={sessao}
+                adcionarAlerta={adcionarAlerta} />
             </ProtectedRoute>} />
         </Routes>
       </BrowserRouter>

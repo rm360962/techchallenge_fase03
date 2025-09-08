@@ -1,12 +1,14 @@
 export type TSession = {
-    usuarioLogado?: TUsuarioLogado,
-    token?: string,
+    usuarioLogado: TUsuarioLogado,
+    expiracao: number,
+    token: string,
 };
 
 export type TUsuarioLogado = {
     id: number,
     login: string,
-    categorias: TCategoriaUsuario,
+    nome: string,
+    categoria: TCategoriaUsuario,
 };
 
 export type TCategoriaUsuario = {

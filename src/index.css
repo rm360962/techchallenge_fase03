@@ -3,6 +3,7 @@
 :root {
 	--bs-body-font-family: 'Nunito Sans', Arial, sans-serif;
 	--bs-btn-font-family: 'Nunito Sans', Arial, sans-serif;
+	--bs-nav-link-color: 'black'
 }
 
 .was-validated .form-control:invalid~.invalid-feedback {

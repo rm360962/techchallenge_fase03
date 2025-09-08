@@ -1,10 +1,10 @@
-import React from 'react';
-import SideBar from '../components/SideBar.tsx';
+import Header from '../components/Header.tsx';
+import { TPageProps } from '../types/TPage.ts';
 
-const Home = (props) => {
+const Home = (props : TPageProps) => {
 	return (
 		<>
-			<SideBar></SideBar>
+			<Header {...props}></Header>
 		</>
 	)
 };
