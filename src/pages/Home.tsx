@@ -1,10 +1,10 @@
 import Header from '../components/Header.tsx';
 import { TPageProps } from '../types/TPage.ts';
 
-const Home = (props : TPageProps) => {
+const Home = () => {
 	return (
 		<>
-			<Header {...props}></Header>
+			<Header/>
 		</>
 	)
 };

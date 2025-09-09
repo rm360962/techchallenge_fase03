@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
-import { TPageProps } from "../types/TPage";
+import { useContext, useEffect, useState } from "react";
+import { SessionContext } from "../sessionContext";
 import iconeLogout from '../assets/logout.svg';
 import iconeUsuario from '../assets/person.svg';
+import { TSession } from "../types/TSession";
+import { useNavigate } from "react-router-dom";
 
-const Header = (props: TPageProps) => {
+const Header = () => {
     const [tempoSessaoRestante, setTempoSessaoRestante] = useState(0);
     const [acessoPgUsuario, setAcessoPgUsuario] = useState(false);
     const [acessoPgCategorias, setAcessoPgCategorias] = useState(false);
+    const context = useContext(SessionContext);
+    const navigator = useNavigate();
 
     const usuarioPossuiPermissao = (permissao) => {
-        const usuarioLogado = props.sessao.usuarioLogado;
+        const usuarioLogado = context.sessao.usuarioLogado;
         const permissaoUsuario = usuarioLogado.categoria.permissoes.find(elemento => elemento === permissao);
         return permissaoUsuario != null;
+    };
+
+    const deslogarUsuario = () => {
+        localStorage.removeItem('token');
+        context.sessao = {} as TSession;
+        navigator('/login');
     };
 
     useEffect(() => {
@@ -19,7 +29,7 @@ const Header = (props: TPageProps) => {
         setAcessoPgCategorias(usuarioPossuiPermissao('buscar_categoria'));
 
         const atualizarTimer = () => {
-            const tempoRestanteMs = (props.sessao.expiracao * 1000) - Date.now();
+            const tempoRestanteMs = (context.sessao.expiracao * 1000) - Date.now();
 
             tempoRestanteMs <= 0 ? setTempoSessaoRestante(0) : setTempoSessaoRestante(tempoRestanteMs);
         };
@@ -62,12 +72,16 @@ const Header = (props: TPageProps) => {
                 </ul>
                 <span className="navbar-text d-flex">
                     <div style={{ fontSize: '14px' }}>
-                        <p style={{ marginBottom: '0', fontWeight: '700' }}>Olá, {props.sessao?.usuarioLogado.nome}.</p>
+                        <p style={{ marginBottom: '0', fontWeight: '700' }}>Olá, {context.sessao?.usuarioLogado.nome}.</p>
                         <p style={{ marginBottom: '0', fontWeight: '700' }}>Sua sessão expira em {minutos}:{segundos}</p>
                     </div>
                     <div className="d-flex flex-column justify-content-center align-items-center ps-4 pe-2">
-                        <img src={iconeUsuario} style={{ width: '25px', height: '25px', cursor: 'pointer', paddingBottom: '5px' }} title="Clique para acessar seu perfil"></img>
-                        <img src={iconeLogout} style={{ width: '25px', height: '25px', cursor: 'pointer', paddingLeft: '5px' }} title="Clique para sair do sistema"></img>
+                        <img src={iconeUsuario} 
+                        style={{ width: '25px', height: '25px', cursor: 'pointer', paddingBottom: '5px' }} 
+                        title="Clique para acessar seu perfil" />
+                        <img src={iconeLogout} 
+                        style={{ width: '25px', height: '25px', cursor: 'pointer', paddingLeft: '5px' }} 
+                        title="Clique para sair do sistema" onClick={() => { deslogarUsuario(); }}/>
                     </div>
                 </span>
             </div>

@@ -1,25 +1,19 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import Input from '../components/Input.tsx';
 import Button from '../components/Button.tsx';
 import { LoginService } from '../service/login.service.js';
-import { TPageProps } from '../types/TPage.ts';
 import { TipoAlerta } from '../types/TAlert.ts';
 import { useNavigate } from "react-router-dom";
+import { SessionContext } from '../sessionContext.ts';
 
-const Login = (props: TPageProps) => {
+const Login = () => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
 	const [carregando, setCarregando] = useState(false);
-	const [loginRealizado, setLoginRealizado] = useState(false);
 	const [service, setService] = useState(new LoginService());
 	const navegador = useNavigate();
+	const context = useContext(SessionContext);
 	
-	useEffect(() => {
-		if(loginRealizado) {
-			navegador('/');
-		}
-	}, [loginRealizado]);
-
 	const logarUsuario = async (event: FormEvent) => {
 		event.preventDefault();
 
@@ -40,7 +34,7 @@ const Login = (props: TPageProps) => {
 		setCarregando(false);
 
 		if (erro) {
-			props.adcionarAlerta({
+			context.adcionarAlerta({
 				tipo: TipoAlerta.Erro,
 				mensagem: erro,
 			});
@@ -52,13 +46,13 @@ const Login = (props: TPageProps) => {
 		const dataAtualSegundos = Math.floor(Date.now() / 1000);
         const umaHoraSegundos = 3600;
 
-		props.setSessao?.({
+		context.setSessao?.({
 			usuarioLogado: usuarioLogado,
 			token: tokenJwt,
 			expiracao: dataAtualSegundos + umaHoraSegundos
 		});
-		
-		setLoginRealizado(true);
+
+		navegador('/')
 	};
 
 	return (
