@@ -66,10 +66,10 @@ const Login = () => {
 						<label>Usuário </label>
 						<Input
 							placeholder="Informe o usuário"
-							title="Informe o usuário para acesso ao sistema"
-							value={usuario}
+							titulo="Informe o usuário para acesso ao sistema"
+							valor={usuario}
 							onChange={(e) => setUsuario(e.target.value)}
-							required={true}
+							obrigatorio={true}
 						/>
 						<div className="invalid-feedback">
 							O usuário é obrigatório.
@@ -79,11 +79,11 @@ const Login = () => {
 						<label>Senha </label>
 						<Input
 							placeholder="Informe a senha"
-							title="Informe a senha"
-							type="password"
-							value={senha}
+							titulo="Informe a senha"
+							tipo="password"
+							valor={senha}
 							onChange={(e) => setSenha(e.target.value)}
-							required={true}
+							obrigatorio={true}
 						/>
 						<div className="invalid-feedback">
 							A senha deve ser informada.

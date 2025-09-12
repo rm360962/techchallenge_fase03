@@ -1,12 +1,12 @@
 const Input = (props) => {
 	return (
 		<input className='form-control' 
-		type={props.type ?? 'text'}
-		value={props.value}
+		type={props.tipo ?? 'text'}
+		value={props.valor}
 		onChange={props.onChange}
 		placeholder={props.placeholder}
-		title={props.title} 
-		required={props.required}
+		title={props.titulo} 
+		required={props.obrigatorio}
 		/>
 
 	);

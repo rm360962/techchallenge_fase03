@@ -48,7 +48,7 @@ const Header = () => {
     const segundos = Math.floor((Math.max(0, tempoSessaoRestante) / 1000) % 60).toString().padStart(2, '0');
 
     return (
-        <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'lightblue' }}>
+        <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'lightblue', paddingBottom: '0', paddingTop: '0', marginBottom: '15px' }}>
             <a className="navbar-brand p-2" style={{ letterSpacing: '1.5px', fontWeight: '600' }} href="#">Blog Educa</a>
             <button className="navbar-toggler ms-1" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
