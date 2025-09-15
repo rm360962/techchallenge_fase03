@@ -27,7 +27,7 @@ const SearchFilter = (props) => {
 	
 	return (
 		<>
-			<div className="d-flex" style={{ height: '87%'}}>
+			<div className="d-flex" style={{ position: 'absolute'}}>
 				<div className={`d-flex flex-column flex-shrink-0 bg-light mt-2 border ${expandida ? 'p-3' : ''}`}
 					style={estiloBarraFiltros}>
 					<span className="fs-6 fw-semibold">
