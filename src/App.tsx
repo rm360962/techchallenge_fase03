@@ -19,7 +19,8 @@ function App() {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    padding: '0'
+    padding: '0',
+    overflowY: 'scroll'
   };
 
   useEffect(() => {
@@ -67,12 +68,17 @@ function App() {
     });
   };
 
+  const usuarioPossuiPermissao = (permissao : string) => {
+    const permissaoUsuario = sessao.usuarioLogado.categoria.permissoes.find(elemento => elemento === permissao);
+    return permissaoUsuario != null;
+  };
+
   if (carregando) {
     return (<></>)
   }
 
   return (
-    <SessionContext.Provider value={{ sessao: sessao, setSessao: setSessao, adcionarAlerta: adcionarAlerta }}>
+    <SessionContext.Provider value={{ sessao: sessao, setSessao: setSessao, adcionarAlerta: adcionarAlerta, usuarioPossuiPermissao: usuarioPossuiPermissao }}>
       <div className="container-fluid vh-100" style={style}>
         <div style={{ position: "absolute", top: 0, right: 0, padding: '10px' }}>
           {alertas.map((item: TAlertProps, i: number) => {

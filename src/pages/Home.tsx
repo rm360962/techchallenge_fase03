@@ -1,4 +1,4 @@
-import { use, useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header.tsx';
 import Input from '../components/Input.tsx';
 import SearchFilter from '../components/SearchFilter.tsx';
@@ -30,6 +30,10 @@ const Home = () => {
 		}
 	];
 
+	useEffect(() => {
+		pesquisar();
+	}, []);
+
 	const pesquisar = async () => {
 		const dados = {
 			codigo,
@@ -51,15 +55,14 @@ const Home = () => {
 
 			return;
 		}
-		console.log(listaPostagens)
+
 		setPostagens(listaPostagens);
-		console.log(postagens)
 	};
 
 	return (
 		<>
 			<Header />
-			<div id="pesquisa" className='d-flex'>
+			<div id="pesquisa" className='d-flex' style={{ overflowY: 'scroll'}}>
 				<SearchFilter pesquisar={pesquisar}>
 					<div className='form-group mb-3'>
 						<label className='fw-semibold'>Código</label>
@@ -114,10 +117,13 @@ const Home = () => {
 					</div>
 				</SearchFilter>
 				<div className="container-fluid ps-5">
+					<div>
+						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
+					</div>
 					<div className="row g-1">
 						{postagens.map(postagem => (
-							<div key={postagem.id} className="col-12 col-md-3 col-lg-3 p-2 d-flex align-items-center justify-content-center ">
-								<Card titulo={postagem.titulo} descricao={postagem.descricao} />
+							<div key={postagem.id} className="col-12 col-md-3 col-lg-4 p-2 d-flex align-items-center justify-content-center ">
+								<Card titulo={postagem.titulo} descricao={postagem.descricao} usuarioInclusao={postagem.usuarioInclusao} dataInclusao={postagem.dataInclusao} />
 							</div>
 						))}
 					</div>

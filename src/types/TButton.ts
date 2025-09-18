@@ -6,5 +6,5 @@ export type TButtonProps = {
     carregando?: boolean,
     children: ReactNode,
     onClick?: Function,
-    style?: object
+    style?: any
 };
