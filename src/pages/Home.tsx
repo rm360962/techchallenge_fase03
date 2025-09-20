@@ -8,6 +8,8 @@ import { TPostagem } from '../types/TPostagem.ts';
 import { SessionContext } from '../sessionContext.ts';
 import { TipoAlerta } from '../types/TAlert.ts';
 import Card from '../components/Card.tsx';
+import ViewModal from '../components/ViewModal.tsx';
+import ConfirmModal from '../components/ConfirmModal.tsx';
 
 const Home = () => {
 	const [codigo, setCodigo] = useState('');
@@ -17,8 +19,12 @@ const Home = () => {
 	const [dataInclusaoInicio, setDataInclusaoInicio] = useState('');
 	const [dataInclusaoFim, setDataInclusaoFim] = useState('');
 	const [postagens, setPostagens] = useState([] as TPostagem[]);
+	const [postagem, setPostagem] = useState({} as TPostagem);
+	const [visualizar, setVisualizar] = useState(false);
+	const [remover, setRemover] = useState(false);
 	const postagemService = new PostagemService();
 	const context = useContext(SessionContext);
+
 	const teste = [
 		{
 			valor: 1,
@@ -29,6 +35,21 @@ const Home = () => {
 			label: "exemplo"
 		}
 	];
+
+	const confirmarRemocaoPostagem = (postagem : TPostagem) => {
+		console.log('Confirmando', postagem)
+		setPostagem(postagem);
+		setRemover(true);
+	};
+
+	const excluirPostagem = () => {
+		console.log('Excluindo postagem', postagem);
+	};
+
+	const visualizarPostagem = (postagem : TPostagem) => {
+		setPostagem(postagem);
+		setVisualizar(true);
+	};
 
 	useEffect(() => {
 		pesquisar();
@@ -116,18 +137,31 @@ const Home = () => {
 							onChange={(e: any) => { setDataInclusaoFim(e.target.value) }} />
 					</div>
 				</SearchFilter>
-				<div className="container-fluid ps-5">
+				<div className="container-fluid">
 					<div>
 						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
 					</div>
 					<div className="row g-1">
 						{postagens.map(postagem => (
 							<div key={postagem.id} className="col-12 col-md-3 col-lg-4 p-2 d-flex align-items-center justify-content-center ">
-								<Card titulo={postagem.titulo} descricao={postagem.descricao} usuarioInclusao={postagem.usuarioInclusao} dataInclusao={postagem.dataInclusao} />
+								<Card postagem={postagem} visualizar={visualizarPostagem} remover={confirmarRemocaoPostagem}/>
 							</div>
 						))}
 					</div>
 				</div>
+				<ViewModal 
+					titulo={postagem.titulo} 
+					descricao={postagem.descricao} 
+					visivel={visualizar} 
+					setVisivel={setVisualizar}
+				/>
+				<ConfirmModal 
+					titulo="Remover postagem" 
+					pergunta="Confirma a remoção da postagem?" 
+					visivel={remover} 
+					setVisivel={setRemover}
+					acao={excluirPostagem}
+				/>
 			</div>
 		</>
 	)

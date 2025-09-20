@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { TCard } from "../types/TCard";
 import { SessionContext } from "../sessionContext";
 
-const PostagemCard = (props: TCard) => {
+const Card = ({ postagem, visualizar, remover} : TCard) => {
     const context = useContext(SessionContext);
     const [edicao, setEdicao] = useState(false);
 
@@ -13,18 +13,19 @@ const PostagemCard = (props: TCard) => {
     return (
         <div className="card" style={{ width: '20rem', height: '19rem' }}>
             <div className="card-body">
-                <h5 className="card-title">{props.titulo}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{props.subTitulo}</h6>
-                <p className="card-text" style={{ minHeight: '4rem' }}>{props.descricao.length > 50 ? `${props.descricao.substring(0, 50)}...` : props.descricao}</p>
+                <h5 className="card-title">{postagem.titulo}</h5>
+                <p className="card-text" style={{ minHeight: '4rem' }}>{postagem.descricao.length > 50 ? `${postagem.descricao.substring(0, 50)}...` : postagem.descricao}</p>
                 <hr />
-                <p style={{ margin: '5px' }}><strong className="fw-semibold">Postado pelo usuário {props.usuarioInclusao}</strong></p>
-                <p style={{ margin: '5px' }}><strong className="fw-semibold">Data de criação </strong> {props.dataInclusao.replace(' ', ' as ')}</p>
+                <p className="mb-1"><strong className="fw-semibold">Postado pelo usuário {postagem.usuarioInclusao}</strong></p>
+                <p className="mb-1"><strong className="fw-semibold">Data de criação </strong> {postagem.dataInclusao.replace(' ', ' as ')}</p>
                 {edicao ? (<>
+                    <hr />
                     <div className="row">
                         <div className="col d-flex flex-column justify-content-center">
                             <button 
                                 style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0'}}
-                                title="Clique para visualizar a postagem completa">
+                                title="Clique para visualizar a postagem completa"
+                                onClick={() => {if(visualizar) visualizar(postagem);}}>
                                 &#128269;
                             </button>
                         </div>
@@ -38,7 +39,8 @@ const PostagemCard = (props: TCard) => {
                         <div className="col d-flex flex-column justify-content-center">
                             <button 
                                 style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0'}}
-                                title="Clique para remover a postagem">
+                                title="Clique para remover a postagem"
+                                onClick={() => {if(remover) remover(postagem);}}>
                                     &#10060;
                             </button>
                         </div>
@@ -51,4 +53,4 @@ const PostagemCard = (props: TCard) => {
     );
 };
 
-export default PostagemCard;
+export default Card;

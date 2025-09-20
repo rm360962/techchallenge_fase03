@@ -39,7 +39,13 @@ const SearchFilter = (props) => {
 							{props.children}
 							<hr />
 							<div className="d-flex align-items-center justify-content-center ">
-								<Button tipo="submit" titulo="Clique para aplicar os filtros de pesquisa" carregando={carregando}>Aplicar filtros</Button>
+								<Button 
+									tipo="submit" 
+									titulo="Clique para aplicar os filtros de pesquisa" 
+									carregando={carregando}
+									class="primary">
+									Aplicar filtros
+								</Button>
 							</div>
 						</form>
 					</div>

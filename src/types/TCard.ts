@@ -1,7 +1,8 @@
+import { TPostagem } from "./TPostagem";
+
 export type TCard = {
-    titulo: string,
-    subTitulo?: string,
-    descricao: string,
-    usuarioInclusao: string,
-    dataInclusao: string,
+    postagem: TPostagem,
+    visualizar?: Function,
+    remover?: Function,
+    editar?: Function,
 };
