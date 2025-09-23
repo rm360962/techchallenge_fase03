@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { TCard } from "../types/TCard";
 import { SessionContext } from "../sessionContext";
 
-const Card = ({ postagem, visualizar, remover} : TCard) => {
+const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
     const context = useContext(SessionContext);
     const [edicao, setEdicao] = useState(false);
 
@@ -32,7 +32,8 @@ const Card = ({ postagem, visualizar, remover} : TCard) => {
                         <div className="col d-flex flex-column justify-content-center">
                             <button 
                                 style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0'}}
-                                title="Clique para editar a postagem">
+                                title="Clique para editar a postagem"
+                                onClick={() => {if(editar) editar(postagem)}}>
                                     &#128221;
                             </button>
                         </div>

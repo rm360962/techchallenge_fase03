@@ -9,6 +9,7 @@ const Input = (props : TInputProps) => {
 		placeholder={props.placeholder}
 		title={props.titulo} 
 		required={props.obrigatorio}
+		disabled={props.desabilitado}
 		/>
 
 	);

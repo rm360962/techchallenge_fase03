@@ -5,4 +5,5 @@ export type TInputProps = {
     placeholder?: string,
     obrigatorio: boolean,
     onChange: Function
+    desabilitado?: boolean,
 };

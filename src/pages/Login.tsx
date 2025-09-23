@@ -68,7 +68,7 @@ const Login = () => {
 							placeholder="Informe o usuário"
 							titulo="Informe o usuário para acesso ao sistema"
 							valor={usuario}
-							onChange={(e) => setUsuario(e.target.value)}
+							onChange={(e : any) => setUsuario(e.target.value)}
 							obrigatorio={true}
 						/>
 						<div className="invalid-feedback">
@@ -82,7 +82,7 @@ const Login = () => {
 							titulo="Informe a senha"
 							tipo="password"
 							valor={senha}
-							onChange={(e) => setSenha(e.target.value)}
+							onChange={(e : any) => setSenha(e.target.value)}
 							obrigatorio={true}
 						/>
 						<div className="invalid-feedback">
@@ -90,7 +90,10 @@ const Login = () => {
 						</div>
 					</div>
 					<div className='d-flex justify-content-center'>
-						<Button titulo="Precione para entrar no sistema (Atalho: ENTER)" carregando={carregando}>Entrar</Button>
+						<Button 
+							titulo="Precione para entrar no sistema"
+							class="primary" 
+							carregando={carregando}>Entrar</Button>
 					</div>
 				</form>
 			</div>

@@ -41,8 +41,8 @@ const ConfirmModal = ({ visivel, setVisivel, titulo, pergunta, acao } : TConfirm
                         <div className="modal-footer">
                             <Button 
                                 tipo="button" 
-                                titulo="Clique para confirma a remoção" 
-                                carregando={carregando}
+                                titulo="Clique para voltar" 
+                                desabilitado={carregando}
                                 style={{ minWidth: '50px' }}
                                 class="secondary"
                                 onClick={(e : any) => { setVisivel(false); }}>
@@ -50,7 +50,7 @@ const ConfirmModal = ({ visivel, setVisivel, titulo, pergunta, acao } : TConfirm
                             </Button>
                             <Button 
                                 tipo="button" 
-                                titulo="Clique para confirma a remoção" 
+                                titulo="Clique para confirmar a remoção" 
                                 carregando={carregando}
                                 style={{ minWidth: '50px' }}
                                 class="primary"

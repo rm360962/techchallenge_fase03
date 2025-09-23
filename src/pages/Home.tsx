@@ -4,14 +4,22 @@ import Input from '../components/Input.tsx';
 import SearchFilter from '../components/SearchFilter.tsx';
 import Select from '../components/Select.tsx';
 import { PostagemService } from '../service/postagem.service.js';
-import { TPostagem } from '../types/TPostagem.ts';
+import { TPostagem, TUsuarioBasico } from '../types/TPostagem.ts';
 import { SessionContext } from '../sessionContext.ts';
 import { TipoAlerta } from '../types/TAlert.ts';
 import Card from '../components/Card.tsx';
 import ViewModal from '../components/ViewModal.tsx';
 import ConfirmModal from '../components/ConfirmModal.tsx';
+import EditModal from '../components/EditModal.tsx';
+import TextArea from '../components/TextArea.tsx';
+import Button from '../components/Button.tsx';
 
 const Home = () => {
+	const postagemInicial: TPostagem = {
+		titulo: '',
+		descricao: ''
+	};
+
 	const [codigo, setCodigo] = useState('');
 	const [titulo, setTitulo] = useState('');
 	const [descricao, setDescricao] = useState('');
@@ -19,9 +27,12 @@ const Home = () => {
 	const [dataInclusaoInicio, setDataInclusaoInicio] = useState('');
 	const [dataInclusaoFim, setDataInclusaoFim] = useState('');
 	const [postagens, setPostagens] = useState([] as TPostagem[]);
-	const [postagem, setPostagem] = useState({} as TPostagem);
+	const [postagem, setPostagem] = useState(postagemInicial);
+
 	const [visualizar, setVisualizar] = useState(false);
 	const [remover, setRemover] = useState(false);
+	const [editar, setEditar] = useState(false);
+
 	const postagemService = new PostagemService();
 	const context = useContext(SessionContext);
 
@@ -35,21 +46,6 @@ const Home = () => {
 			label: "exemplo"
 		}
 	];
-
-	const confirmarRemocaoPostagem = (postagem : TPostagem) => {
-		console.log('Confirmando', postagem)
-		setPostagem(postagem);
-		setRemover(true);
-	};
-
-	const excluirPostagem = () => {
-		console.log('Excluindo postagem', postagem);
-	};
-
-	const visualizarPostagem = (postagem : TPostagem) => {
-		setPostagem(postagem);
-		setVisualizar(true);
-	};
 
 	useEffect(() => {
 		pesquisar();
@@ -80,10 +76,95 @@ const Home = () => {
 		setPostagens(listaPostagens);
 	};
 
+	const confirmarRemocaoPostagem = (postagem: TPostagem) => {
+		setPostagem(postagem);
+		setRemover(true);
+	};
+
+	const excluirPostagem = async () => {
+		if(!postagem.id) {
+			return;
+		}
+
+		const postagemExcluida = await postagemService.excluirPostagem(context.sessao.token, postagem.id);
+
+		context.adcionarAlerta({
+			tipo: postagemExcluida ? TipoAlerta.Sucesso : TipoAlerta.Erro,
+			mensagem: postagemExcluida ? 'Postagem excluída com sucesso' : 'Erro excluir a postagem',
+		});
+
+		if (postagemExcluida) {
+			await pesquisar();
+		}
+	};
+
+	const visualizarPostagem = (postagem: TPostagem) => {
+		setPostagem(postagem);
+		setVisualizar(true);
+	};
+
+	const editarPostagem = (postagem: TPostagem) => {
+		setPostagem(postagem);
+		setEditar(true);
+	};
+
+	const novaPostagem = () => {
+		setPostagem(postagemInicial);
+		setEditar(true);
+	};
+
+	const gravarPostagem = async () => {
+		if (postagem.id) {
+			const erros = 
+				await postagemService.editarPostagem(context.sessao.token, postagem);
+			
+			setEditar(false);
+
+			context.adcionarAlerta({
+				tipo: TipoAlerta.Sucesso,
+				mensagem: 'Postagem editada com sucesso',
+			});
+			if(erros) {
+				for(const erro of erros) {
+					context.adcionarAlerta({
+						tipo: TipoAlerta.Erro,
+						mensagem: erro.mensagem
+					});
+				}
+				return;
+			}
+
+
+		} else {
+			const { postagem: postagemCadastrada, erros } = 
+				await postagemService.cadastrarPostagem(context.sessao.token, postagem);
+			
+			if(erros) {
+				for(const erro of erros) {
+					context.adcionarAlerta({
+						tipo: TipoAlerta.Erro,
+						mensagem: erro.mensagem
+					});
+				}
+				return;
+			}
+
+			setPostagem(postagemCadastrada ? postagemCadastrada : postagem);
+			setEditar(false);
+
+			context.adcionarAlerta({
+				tipo: TipoAlerta.Sucesso,
+				mensagem: 'Postagem cadastrada com sucesso',
+			});
+		}
+		
+		await pesquisar();	
+	};
+
 	return (
 		<>
 			<Header />
-			<div id="pesquisa" className='d-flex' style={{ overflowY: 'scroll'}}>
+			<div id="pesquisa" className='d-flex' style={{ overflowY: 'scroll' }}>
 				<SearchFilter pesquisar={pesquisar}>
 					<div className='form-group mb-3'>
 						<label className='fw-semibold'>Código</label>
@@ -138,27 +219,73 @@ const Home = () => {
 					</div>
 				</SearchFilter>
 				<div className="container-fluid">
-					<div>
+					<div className='d-flex align-items-center justify-content-space-between'>
 						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
+						<Button tipo='button' class='primary' onClick={(e: any) => { novaPostagem(); }}>Nova postagem</Button>
 					</div>
 					<div className="row g-1">
 						{postagens.map(postagem => (
 							<div key={postagem.id} className="col-12 col-md-3 col-lg-4 p-2 d-flex align-items-center justify-content-center ">
-								<Card postagem={postagem} visualizar={visualizarPostagem} remover={confirmarRemocaoPostagem}/>
+								<Card
+									postagem={postagem}
+									visualizar={visualizarPostagem}
+									remover={confirmarRemocaoPostagem}
+									editar={editarPostagem}
+								/>
 							</div>
 						))}
 					</div>
 				</div>
-				<ViewModal 
-					titulo={postagem.titulo} 
-					descricao={postagem.descricao} 
-					visivel={visualizar} 
+				<EditModal postagem={postagem} visivel={editar} setVisivel={setEditar} gravar={gravarPostagem}>
+					{postagem.id && (
+						<div className='form-group mb-1'>
+							<label className='fw-semibold'>Código</label>
+							<Input
+								placeholder=""
+								titulo="Código da postagem"
+								valor={postagem.id.toString()}
+								onChange={(e: any) => { }}
+								obrigatorio={true}
+								desabilitado={true}
+							/>
+							<div className="invalid-feedback">
+							</div>
+						</div>
+					)}
+					<div className='form-group mb-1'>
+						<label className='fw-semibold'>Título</label>
+						<Input
+							placeholder="Informe o título da postagem"
+							titulo="Informe o título da postagem"
+							valor={postagem.titulo}
+							onChange={(e: any) => setPostagem({ ...postagem, titulo: e.target.value })}
+							obrigatorio={true}
+						/>
+						<div className="invalid-feedback">
+							O título é obrigatório
+						</div>
+					</div>
+					<div className='form-group mb-1'>
+						<label className='fw-semibold'>Descrição:</label>
+						<TextArea
+							valor={postagem.descricao}
+							onChange={(e: any) => setPostagem({ ...postagem, descricao: e.target.value })}
+							obrigatorio={false} />
+						<div className="invalid-feedback">
+							A descrição é obrigatória
+						</div>
+					</div>
+				</EditModal>
+				<ViewModal
+					titulo={postagem.titulo}
+					descricao={postagem.descricao}
+					visivel={visualizar}
 					setVisivel={setVisualizar}
 				/>
-				<ConfirmModal 
-					titulo="Remover postagem" 
-					pergunta="Confirma a remoção da postagem?" 
-					visivel={remover} 
+				<ConfirmModal
+					titulo="Remover postagem"
+					pergunta="Confirma a remoção da postagem?"
+					visivel={remover}
 					setVisivel={setRemover}
 					acao={excluirPostagem}
 				/>

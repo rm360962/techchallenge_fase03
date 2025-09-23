@@ -16,3 +16,8 @@ export type TCategoriaUsuario = {
     nome: string,
     permissoes: string[],
 };
+
+export type TLoginUsuario = {
+    usuario: string,
+    senha: string,
+};

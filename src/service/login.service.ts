@@ -1,8 +1,9 @@
 import { conexaoApi } from "../axios";
+import { TLoginUsuario } from "../types/TSession";
 
 export class LoginService {
 
-    logarUsuario = async (dados) => {
+    logarUsuario = async (dados : TLoginUsuario) => {
         const { usuario, senha } = dados;
         const autenticacaoBase64 = btoa(`${usuario}:${senha}`);
 

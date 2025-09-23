@@ -80,7 +80,7 @@ function App() {
   return (
     <SessionContext.Provider value={{ sessao: sessao, setSessao: setSessao, adcionarAlerta: adcionarAlerta, usuarioPossuiPermissao: usuarioPossuiPermissao }}>
       <div className="container-fluid vh-100" style={style}>
-        <div style={{ position: "absolute", top: 0, right: 0, padding: '10px' }}>
+        <div style={{ position: "absolute", top: 0, right: 0, padding: '10px', zIndex: '1051' }}>
           {alertas.map((item: TAlertProps, i: number) => {
             return (
               <Alert key={item.id} id={item.id} tipo={item.tipo} mensagem={item.mensagem} removerAlerta={removerAlerta} />

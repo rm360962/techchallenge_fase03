@@ -8,7 +8,7 @@ const Button = (props: TButtonProps) => {
 				type={props.tipo ?? 'submit'}
 				title={props.titulo}
 				style={{ minWidth: '90px', minHeight: '40px', ...props.style }}
-				disabled={props.carregando}
+				disabled={props.carregando || props.desabilitado}
 				onClick={(e) => { if(props.onClick) props.onClick(e); }}
 			>
 				{props.carregando ?
