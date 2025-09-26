@@ -1,5 +1,5 @@
 export type TSelectItem = {
-    valor: number,
+    valor: any,
     label: string,
 };
 

@@ -76,6 +76,10 @@ const Home = () => {
 		setPostagens(listaPostagens);
 	};
 
+	const limparFiltros = () => {
+
+	};
+
 	const confirmarRemocaoPostagem = (postagem: TPostagem) => {
 		setPostagem(postagem);
 		setRemover(true);
@@ -165,7 +169,7 @@ const Home = () => {
 		<>
 			<Header />
 			<div id="pesquisa" className='d-flex' style={{ overflowY: 'scroll' }}>
-				<SearchFilter pesquisar={pesquisar}>
+				<SearchFilter pesquisar={pesquisar} limpar={limparFiltros}>
 					<div className='form-group mb-3'>
 						<label className='fw-semibold'>Código</label>
 						<Input
@@ -219,7 +223,7 @@ const Home = () => {
 					</div>
 				</SearchFilter>
 				<div className="container-fluid">
-					<div className='d-flex align-items-center justify-content-space-between'>
+					<div className='d-flex align-items-center justify-content-between'>
 						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
 						<Button tipo='button' class='primary' onClick={(e: any) => { novaPostagem(); }}>Nova postagem</Button>
 					</div>

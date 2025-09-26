@@ -1,16 +1,17 @@
 import { FormEvent, useState } from "react";
 import Button from "./Button";
+import { TSearchFilter } from "../types/TSearchFilter";
 
-const SearchFilter = (props) => {
+const SearchFilter = ({ children, pesquisar, limpar }: TSearchFilter) => {
 	const [expandida, setExpandida] = useState(true);
 	const [carregando, setCarregando] = useState(false);
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		
+
 		setCarregando(true);
 
-		await props?.pesquisar();
+		await pesquisar();
 
 		setCarregando(false);
 		alterarBarraFiltros();
@@ -19,12 +20,12 @@ const SearchFilter = (props) => {
 	const alterarBarraFiltros = () => {
 		setExpandida(!expandida);
 	}
-	
+
 	const estiloBarraFiltros = {
 		width: expandida ? '250px' : '0',
 		overflow: 'hidden'
 	};
-	
+
 	return (
 		<>
 			<div className="d-flex">
@@ -36,12 +37,21 @@ const SearchFilter = (props) => {
 					<hr />
 					<div>
 						<form noValidate onSubmit={(e) => handleSubmit(e)}>
-							{props.children}
+							{children}
 							<hr />
-							<div className="d-flex align-items-center justify-content-center ">
-								<Button 
-									tipo="submit" 
-									titulo="Clique para aplicar os filtros de pesquisa" 
+							<div className="d-flex align-items-center justify-content-center flex-column">
+								<Button
+									tipo="button"
+									titulo="Clique para limpar os filtros"
+									desabilitado={carregando}
+									style={{ width: '122px', marginBottom: '5px'}}
+									class="secondary"
+									onClick={() => { limpar();}}>
+									Limpar
+								</Button>
+								<Button
+									tipo="submit"
+									titulo="Clique para aplicar os filtros de pesquisa"
 									carregando={carregando}
 									class="primary">
 									Aplicar filtros
@@ -50,7 +60,7 @@ const SearchFilter = (props) => {
 						</form>
 					</div>
 				</div>
-				<button className="p-3 mt-2 d-flex align-items-center justify-content-center fw-bold" onClick={alterarBarraFiltros} style={{ width: '20px', backgroundColor: 'lightblue', border: 'none'}}>
+				<button className="p-3 mt-2 d-flex align-items-center justify-content-center fw-bold" onClick={alterarBarraFiltros} style={{ width: '20px', backgroundColor: 'lightblue', border: 'none' }}>
 					{expandida ? '>>' : '<<'}
 				</button>
 			</div>

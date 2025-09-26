@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { TAlertProps } from "./types/TAlert.js";
 import { TSession } from "./types/TSession.js";
 import { SessionContext } from "./sessionContext.js";
+import Usuario from "./pages/Usuario.js";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
@@ -68,7 +69,7 @@ function App() {
     });
   };
 
-  const usuarioPossuiPermissao = (permissao : string) => {
+  const usuarioPossuiPermissao = (permissao: string) => {
     const permissaoUsuario = sessao.usuarioLogado.categoria.permissoes.find(elemento => elemento === permissao);
     return permissaoUsuario != null;
   };
@@ -90,11 +91,16 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={
-              <Login />} 
+              <Login />}
             />
             <Route path="/" element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>}
+            />
+            <Route path="/usuario" element={
+              <ProtectedRoute>
+                <Usuario />
               </ProtectedRoute>}
             />
           </Routes>
