@@ -9,6 +9,7 @@ import { TAlertProps } from "./types/TAlert.js";
 import { TSession } from "./types/TSession.js";
 import { SessionContext } from "./sessionContext.js";
 import Usuario from "./pages/Usuario.js";
+import EditarUsuario from "./pages/EditarUsuario.js";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
@@ -54,8 +55,8 @@ function App() {
 
   const adcionarAlerta = (alerta: TAlertProps) => {
     alerta.id = Date.now().toString();
-    setAlertas([
-      ...alertas,
+    setAlertas((prevAlertas) => [
+      ...prevAlertas,
       alerta
     ]);
   };
@@ -98,9 +99,14 @@ function App() {
                 <Home />
               </ProtectedRoute>}
             />
-            <Route path="/usuario" element={
+            <Route path="/usuarios" element={
               <ProtectedRoute>
                 <Usuario />
+              </ProtectedRoute>}
+            />
+            <Route path="/usuarios/editar/:id" element={
+              <ProtectedRoute>
+                <EditarUsuario />
               </ProtectedRoute>}
             />
           </Routes>

@@ -248,7 +248,7 @@ const Home = () => {
 								placeholder=""
 								titulo="Código da postagem"
 								valor={postagem.id.toString()}
-								onChange={(e: any) => { }}
+								onChange={(e: any) => {}}
 								obrigatorio={true}
 								desabilitado={true}
 							/>

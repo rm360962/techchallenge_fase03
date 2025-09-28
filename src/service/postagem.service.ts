@@ -62,8 +62,10 @@ export class PostagemService {
             return {
                 postagem: null,
                 erros: [
-                    'Erro ao cadastrar a postagem'
-                ]
+                    {
+                        mensagem: 'Erro ao cadastrar a postagem',
+                    }
+                ],
             }
         }
     };

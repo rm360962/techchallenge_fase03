@@ -9,6 +9,7 @@ import { TipoAlerta } from "../types/TAlert";
 import Button from "../components/Button";
 import Select from "../components/Select";
 import { TSelectItem } from "../types/TSelect";
+import { useNavigate } from "react-router-dom";
 
 const Usuario = () => {
     const usuarioBuscaInicial: TBuscaUsuario = {
@@ -25,6 +26,7 @@ const Usuario = () => {
 
     const usuarioService = new UsuarioService();
     const context = useContext(SessionContext);
+    const nagivator = useNavigate();
     const categorias : TSelectItem[] = [];
     const SimNao : TSelectItem[] = [{
         label: 'Sim',
@@ -35,7 +37,7 @@ const Usuario = () => {
     }];
 
     useEffect(() => {
-
+        pesquisar();
     }, [])
 
     const pesquisar = async () => {
@@ -63,6 +65,10 @@ const Usuario = () => {
 
     const limparFiltros = () => {
         setBuscaUsuario(usuarioBuscaInicial);
+    };
+
+    const editarUsuario = (id : number) => {
+        nagivator(`/usuarios/editar/${id}`);
     };
 
     return (
@@ -125,11 +131,12 @@ const Usuario = () => {
                 </SearchFilter>
                 <div className="container-fluid">
                     <div className='d-flex align-items-center justify-content-between mb-2'>
-                        <p className="h5 fw-semibold" style={{ letterSpacing: '1px', marginBottom: '0' }}>&#128240; Postagens encontradas</p>
+                        <p className="h5 fw-semibold" style={{ letterSpacing: '1px', marginBottom: '0' }}>&#129489; Usuários cadastrados</p>
                         <Button
                             tipo="button"
                             titulo="Clique para cadastrar um novo usuário no sistema"
                             class="primary"
+                            onClick={() => { nagivator(`/usuarios/editar/null`)}}
                         >
                             Novo usuário
                         </Button>
@@ -152,13 +159,14 @@ const Usuario = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {usuarios.map((item: TUsuario) => {
+                                {usuarios.map((usuario: TUsuario) => {
                                     return (
-                                        <tr key={item.id}>
+                                        <tr key={usuario.id}>
                                             <td>
                                                 <button
                                                     style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
                                                     title="Clique para editar o usuário"
+                                                    onClick={(e) => { editarUsuario(usuario.id)}}
                                                 >
                                                     &#128221;
                                                 </button>
@@ -169,16 +177,16 @@ const Usuario = () => {
                                                     &#10060;
                                                 </button>
                                             </td>
-                                            <td>{item.id}</td>
-                                            <td>{item.nome}</td>
-                                            <td>{item.email}</td>
-                                            <td>{item.login}</td>
-                                            <td>{item.ativo ? 'Sim' : 'Não'}</td>
-                                            <td>{item.categoria.nome}</td>
-                                            <td>{item.dataInclusao}</td>
-                                            <td>{item.usuarioInclusao}</td>
-                                            <td>{item.dataAlteracao}</td>
-                                            <td>{item.usuarioAlteracao}</td>
+                                            <td>{usuario.id}</td>
+                                            <td>{usuario.nome}</td>
+                                            <td>{usuario.email}</td>
+                                            <td>{usuario.login}</td>
+                                            <td>{usuario.ativo ? 'Sim' : 'Não'}</td>
+                                            <td>{usuario.categoria.nome}</td>
+                                            <td>{usuario.dataInclusao}</td>
+                                            <td>{usuario.usuarioInclusao}</td>
+                                            <td>{usuario.dataAlteracao}</td>
+                                            <td>{usuario.usuarioAlteracao}</td>
                                         </tr>
                                     )
                                 })}

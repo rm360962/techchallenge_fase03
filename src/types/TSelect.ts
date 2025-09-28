@@ -7,5 +7,6 @@ export type TSelectProps = {
     itens: TSelectItem[],
     onChange: Function,
     mensagemPadrao: string,
-    titulo: string
+    titulo: string,
+    obrigatorio?: boolean
 };
