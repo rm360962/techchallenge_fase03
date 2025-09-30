@@ -3,4 +3,5 @@ export type TTextArea = {
     tamanhoMaximo?: number,
     onChange: Function,
     obrigatorio: boolean,
+    style?: any
 };

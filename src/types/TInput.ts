@@ -6,4 +6,5 @@ export type TInputProps = {
     obrigatorio: boolean,
     onChange: Function
     desabilitado?: boolean,
+    style?: any,
 };

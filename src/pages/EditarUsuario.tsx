@@ -86,7 +86,6 @@ const EditarUsuario = () => {
 
             if (erros) {
                 for (const erro of erros) {
-                    console.log(erro)
                     context.adcionarAlerta({
                         tipo: TipoAlerta.Erro,
                         mensagem: erro.mensagem
@@ -105,7 +104,6 @@ const EditarUsuario = () => {
 
             if (erros) {
                 for (const erro of erros) {
-                    console.log(erro)
                     context.adcionarAlerta({
                         tipo: TipoAlerta.Erro,
                         mensagem: erro.mensagem

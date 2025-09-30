@@ -10,6 +10,7 @@ const Input = (props : TInputProps) => {
 		title={props.titulo} 
 		required={props.obrigatorio}
 		disabled={props.desabilitado}
+		style={props.style}
 		/>
 
 	);

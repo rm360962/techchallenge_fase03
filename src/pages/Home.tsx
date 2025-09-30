@@ -4,22 +4,16 @@ import Input from '../components/Input.tsx';
 import SearchFilter from '../components/SearchFilter.tsx';
 import Select from '../components/Select.tsx';
 import { PostagemService } from '../service/postagem.service.js';
-import { TPostagem, TUsuarioBasico } from '../types/TPostagem.ts';
+import { TPostagem } from '../types/TPostagem.ts';
 import { SessionContext } from '../sessionContext.ts';
 import { TipoAlerta } from '../types/TAlert.ts';
 import Card from '../components/Card.tsx';
 import ViewModal from '../components/ViewModal.tsx';
 import ConfirmModal from '../components/ConfirmModal.tsx';
-import EditModal from '../components/EditModal.tsx';
-import TextArea from '../components/TextArea.tsx';
 import Button from '../components/Button.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-	const postagemInicial: TPostagem = {
-		titulo: '',
-		descricao: ''
-	};
-
 	const [codigo, setCodigo] = useState('');
 	const [titulo, setTitulo] = useState('');
 	const [descricao, setDescricao] = useState('');
@@ -27,14 +21,14 @@ const Home = () => {
 	const [dataInclusaoInicio, setDataInclusaoInicio] = useState('');
 	const [dataInclusaoFim, setDataInclusaoFim] = useState('');
 	const [postagens, setPostagens] = useState([] as TPostagem[]);
-	const [postagem, setPostagem] = useState(postagemInicial);
+	const [postagem, setPostagem] = useState({} as TPostagem);
 
 	const [visualizar, setVisualizar] = useState(false);
 	const [remover, setRemover] = useState(false);
-	const [editar, setEditar] = useState(false);
 
 	const postagemService = new PostagemService();
 	const context = useContext(SessionContext);
+	const navigator = useNavigate();
 
 	const teste = [
 		{
@@ -86,7 +80,7 @@ const Home = () => {
 	};
 
 	const excluirPostagem = async () => {
-		if(!postagem.id) {
+		if (!postagem.id) {
 			return;
 		}
 
@@ -108,61 +102,7 @@ const Home = () => {
 	};
 
 	const editarPostagem = (postagem: TPostagem) => {
-		setPostagem(postagem);
-		setEditar(true);
-	};
-
-	const novaPostagem = () => {
-		setPostagem(postagemInicial);
-		setEditar(true);
-	};
-
-	const gravarPostagem = async () => {
-		if (postagem.id) {
-			const erros = 
-				await postagemService.editarPostagem(context.sessao.token, postagem);
-			
-			setEditar(false);
-
-			context.adcionarAlerta({
-				tipo: TipoAlerta.Sucesso,
-				mensagem: 'Postagem editada com sucesso',
-			});
-			if(erros) {
-				for(const erro of erros) {
-					context.adcionarAlerta({
-						tipo: TipoAlerta.Erro,
-						mensagem: erro.mensagem
-					});
-				}
-				return;
-			}
-
-
-		} else {
-			const { postagem: postagemCadastrada, erros } = 
-				await postagemService.cadastrarPostagem(context.sessao.token, postagem);
-			
-			if(erros) {
-				for(const erro of erros) {
-					context.adcionarAlerta({
-						tipo: TipoAlerta.Erro,
-						mensagem: erro.mensagem
-					});
-				}
-				return;
-			}
-
-			setPostagem(postagemCadastrada ? postagemCadastrada : postagem);
-			setEditar(false);
-
-			context.adcionarAlerta({
-				tipo: TipoAlerta.Sucesso,
-				mensagem: 'Postagem cadastrada com sucesso',
-			});
-		}
-		
-		await pesquisar();	
+		navigator(`/postagens/editar/${postagem.id}`)
 	};
 
 	return (
@@ -225,7 +165,7 @@ const Home = () => {
 				<div className="container-fluid">
 					<div className='d-flex align-items-center justify-content-between'>
 						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
-						<Button tipo='button' class='primary' onClick={(e: any) => { novaPostagem(); }}>Nova postagem</Button>
+						<Button tipo='button' class='primary' onClick={(e: any) => { navigator('/postagens/editar/null')}}>Nova postagem</Button>
 					</div>
 					<div className="row g-1">
 						{postagens.map(postagem => (
@@ -240,46 +180,6 @@ const Home = () => {
 						))}
 					</div>
 				</div>
-				<EditModal postagem={postagem} visivel={editar} setVisivel={setEditar} gravar={gravarPostagem}>
-					{postagem.id && (
-						<div className='form-group mb-1'>
-							<label className='fw-semibold'>Código</label>
-							<Input
-								placeholder=""
-								titulo="Código da postagem"
-								valor={postagem.id.toString()}
-								onChange={(e: any) => {}}
-								obrigatorio={true}
-								desabilitado={true}
-							/>
-							<div className="invalid-feedback">
-							</div>
-						</div>
-					)}
-					<div className='form-group mb-1'>
-						<label className='fw-semibold'>Título</label>
-						<Input
-							placeholder="Informe o título da postagem"
-							titulo="Informe o título da postagem"
-							valor={postagem.titulo}
-							onChange={(e: any) => setPostagem({ ...postagem, titulo: e.target.value })}
-							obrigatorio={true}
-						/>
-						<div className="invalid-feedback">
-							O título é obrigatório
-						</div>
-					</div>
-					<div className='form-group mb-1'>
-						<label className='fw-semibold'>Descrição:</label>
-						<TextArea
-							valor={postagem.descricao}
-							onChange={(e: any) => setPostagem({ ...postagem, descricao: e.target.value })}
-							obrigatorio={false} />
-						<div className="invalid-feedback">
-							A descrição é obrigatória
-						</div>
-					</div>
-				</EditModal>
 				<ViewModal
 					titulo={postagem.titulo}
 					descricao={postagem.descricao}

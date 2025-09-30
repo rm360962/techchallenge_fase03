@@ -1,7 +1,12 @@
+import { useContext } from "react";
 import { conexaoApi } from "../axios";
-import { TBuscaPostagem, TPostagem, TRespostaCadastroPostagem } from "../types/TPostagem";
+import { TBuscaPostagem, TEdicaoPostagem, TPostagem } from "../types/TPostagem";
+import { SessionContext } from "../sessionContext";
+import { TRespostaErroApi } from "../types/TRespostaErroApi";
 
 export class PostagemService {
+    private context = useContext(SessionContext);
+
     buscarPostagens = async (token: string, dados: TBuscaPostagem) => {
         const params: { [key: string]: any } = {};
         for (const [chave, valor] of Object.entries(dados)) {
@@ -33,14 +38,37 @@ export class PostagemService {
         }
     };
 
-    cadastrarPostagem = async (token: string, postagem: TPostagem): Promise<TRespostaCadastroPostagem> => {
+    buscarPostagemPorId = async (id: number): Promise<{ erro: string | null, postagem: TPostagem }> => {
+        try {
+            const resposta = await conexaoApi({
+                method: 'get',
+                url: '/posts',
+                headers: {
+                    token: this.context.sessao.token,
+                },
+            });
+
+            return {
+                erro: resposta.status === 200 ? null : 'Erro ao buscar a postagem',
+                postagem: resposta.status === 200 ? resposta.data[0] : {}
+            };
+        } catch (erro) {
+            console.log('Erro buscar a postagem por id', erro);
+            return {
+                erro: 'Erro ao buscar a postagem',
+                postagem: {} as TPostagem
+            };
+        }
+    };
+
+    cadastrarPostagem = async (postagem: TEdicaoPostagem): Promise<{ erros: TRespostaErroApi[] | null, postagem: TEdicaoPostagem }> => {
         try {
             const resposta = await conexaoApi({
                 method: 'post',
                 url: '/posts',
                 data: postagem,
                 headers: {
-                    token: token
+                    token: this.context.sessao.token,
                 },
                 validateStatus: (status: number) => [201, 422].includes(status),
             });
@@ -53,14 +81,14 @@ export class PostagemService {
                 };
             } else {
                 return {
-                    postagem: null,
+                    postagem: {} as TEdicaoPostagem,
                     erros: resposta.data.erros,
                 };
             }
         } catch (erro) {
             console.log('Erro no cadastro da postagem', erro);
             return {
-                postagem: null,
+                postagem: {} as TEdicaoPostagem,
                 erros: [
                     {
                         mensagem: 'Erro ao cadastrar a postagem',
@@ -70,14 +98,14 @@ export class PostagemService {
         }
     };
 
-    editarPostagem = async (token: string, postagem: TPostagem) => {
+    editarPostagem = async (postagem: TEdicaoPostagem): Promise<TRespostaErroApi[] | null> => {
         try {
             const resposta = await conexaoApi({
                 method: 'put',
                 url: `/posts/${postagem.id}`,
                 data: postagem,
                 headers: {
-                    token: token
+                    token: this.context.sessao.token,
                 },
                 validateStatus: (status: number) => [200, 422].includes(status),
             });
@@ -89,12 +117,11 @@ export class PostagemService {
             }
         } catch (erro) {
             console.log('Erro ao editar a postagem', erro);
-            return {
-                editado: false,
-                erros: [
-                    'Erro ao editar a postagem'
-                ],
-            };
+            return [
+                {
+                    mensagem: 'Erro ao editar a postagem'
+                }
+            ];
         }
     };
 

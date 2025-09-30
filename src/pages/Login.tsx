@@ -10,9 +10,9 @@ const Login = () => {
 	const [usuario, setUsuario] = useState("");
 	const [senha, setSenha] = useState("");
 	const [carregando, setCarregando] = useState(false);
-	const [service, setService] = useState(new LoginService());
 	const navegador = useNavigate();
 	const context = useContext(SessionContext);
+	const loginService = new LoginService();
 	
 	const logarUsuario = async (event: FormEvent) => {
 		event.preventDefault();
@@ -26,7 +26,7 @@ const Login = () => {
 
 		setCarregando(true);
 
-		const { erro, usuarioLogado, tokenJwt } = await service.logarUsuario({
+		const { erro, usuarioLogado, tokenJwt } = await loginService.logarUsuario({
 			usuario,
 			senha
 		});
@@ -63,7 +63,7 @@ const Login = () => {
 				</div>
 				<form id="formLogin" noValidate onSubmit={(e) => logarUsuario(e)}>
 					<div className='form-group mb-1'>
-						<label>Usuário </label>
+						<label className='fw-semibold'>Usuário </label>
 						<Input
 							placeholder="Informe o usuário"
 							titulo="Informe o usuário para acesso ao sistema"
@@ -76,7 +76,7 @@ const Login = () => {
 						</div>
 					</div>
 					<div className='form-group mb-3'>
-						<label>Senha </label>
+						<label className='fw-semibold'>Senha </label>
 						<Input
 							placeholder="Informe a senha"
 							titulo="Informe a senha"

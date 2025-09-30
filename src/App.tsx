@@ -10,6 +10,7 @@ import { TSession } from "./types/TSession.js";
 import { SessionContext } from "./sessionContext.js";
 import Usuario from "./pages/Usuario.js";
 import EditarUsuario from "./pages/EditarUsuario.js";
+import EditarPostagem from "./pages/EditarPostagem.js";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
@@ -97,6 +98,11 @@ function App() {
             <Route path="/" element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>}
+            />
+            <Route path="/postagens/editar/:id" element={
+              <ProtectedRoute>
+                <EditarPostagem />
               </ProtectedRoute>}
             />
             <Route path="/usuarios" element={

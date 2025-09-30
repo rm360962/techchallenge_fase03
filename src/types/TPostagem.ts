@@ -21,7 +21,8 @@ export type TBuscaPostagem = {
     dataInclusaoFim?: string
 };
 
-export type TRespostaCadastroPostagem = {
-    postagem: TPostagem | null,
-    erros: any[] | null
+export type TEdicaoPostagem = {
+    id?: number,
+    titulo: string,
+    descricao: string
 };
