@@ -11,7 +11,7 @@ const Alert = (props: TAlertProps) => {
 
         const alterarOpacidadeTimeout = setTimeout(() => {
             setOpacidade(0);
-        }, 9400);
+        }, 3400);
 
         const removerAlertaTimeout = setTimeout(() => {
             if (!alertaRemovido) {
@@ -19,7 +19,7 @@ const Alert = (props: TAlertProps) => {
                 props.removerAlerta?.(props);
                 alertaRemovido = true;
             }
-        }, 10000);
+        }, 4000);
 
         return () => {
             clearTimeout(alterarOpacidadeTimeout);

@@ -10,7 +10,6 @@ import { TipoAlerta } from "../types/TAlert";
 import { TSelectItem } from "../types/TSelect";
 import Select from "../components/Select";
 import { TCategoriaUsuario } from "../types/TSession";
-import { SimNao } from "../util";
 
 const EditarUsuario = () => {
     const [usuario, setUsuario] = useState({} as TEdicaoUsuario);
@@ -188,6 +187,7 @@ const EditarUsuario = () => {
                                 <div className="form-group">
                                     <label className='fw-semibold'>Categoria</label>
                                     <Select
+                                        valor={usuario.categoriaId ? usuario.categoriaId.toString() : ''}
                                         titulo="Selecione a categoria do usuário"
                                         mensagemPadrao="Selecione a categoria"
                                         itens={categorias}

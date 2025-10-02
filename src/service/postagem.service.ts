@@ -7,7 +7,7 @@ import { TRespostaErroApi } from "../types/TRespostaErroApi";
 export class PostagemService {
     private context = useContext(SessionContext);
 
-    buscarPostagens = async (token: string, dados: TBuscaPostagem) => {
+    buscarPostagens = async (dados: TBuscaPostagem) => {
         const params: { [key: string]: any } = {};
         for (const [chave, valor] of Object.entries(dados)) {
             if (valor !== null && valor !== undefined && valor !== '') {
@@ -21,7 +21,7 @@ export class PostagemService {
                 url: '/posts',
                 params: params,
                 headers: {
-                    token: token
+                    token: this.context.sessao.token
                 }
             });
 
@@ -42,7 +42,7 @@ export class PostagemService {
         try {
             const resposta = await conexaoApi({
                 method: 'get',
-                url: '/posts',
+                url: `/posts/${id}`,
                 headers: {
                     token: this.context.sessao.token,
                 },
@@ -125,14 +125,14 @@ export class PostagemService {
         }
     };
 
-    excluirPostagem = async (token: string, id: number) => {
+    excluirPostagem = async (id: number) : Promise<boolean> => {
         try {
             const resposta = await conexaoApi({
                 method: 'delete',
                 url: `/posts/${id}`,
                 headers: {
-                    token: token
-                }
+                    token: this.context.sessao.token
+                },
             });
 
             return resposta.status === 200;

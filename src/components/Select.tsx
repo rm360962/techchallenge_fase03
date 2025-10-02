@@ -1,8 +1,9 @@
 import { TSelectProps } from "../types/TSelect";
 
-const Select = ({ onChange, titulo, obrigatorio, mensagemPadrao, itens } : TSelectProps) => {
+const Select = ({ valor, onChange, titulo, obrigatorio, mensagemPadrao, itens } : TSelectProps) => {
     return (
-        <select 
+        <select
+            value={valor} 
             className="form-select" 
             onChange={(e) => onChange(e)} 
             title={titulo} 

@@ -3,20 +3,13 @@ import { SessionContext } from "../sessionContext";
 import iconeLogout from '../assets/logout.svg';
 import iconeUsuario from '../assets/person.svg';
 import { TSession } from "../types/TSession";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
     const [tempoSessaoRestante, setTempoSessaoRestante] = useState(0);
     const [acessoPgUsuario, setAcessoPgUsuario] = useState(false);
-    const [acessoPgCategorias, setAcessoPgCategorias] = useState(false);
     const context = useContext(SessionContext);
     const navigator = useNavigate();
-
-    const usuarioPossuiPermissao = (permissao) => {
-        const usuarioLogado = context.sessao.usuarioLogado;
-        const permissaoUsuario = usuarioLogado.categoria.permissoes.find(elemento => elemento === permissao);
-        return permissaoUsuario != null;
-    };
 
     const deslogarUsuario = () => {
         localStorage.removeItem('token');
@@ -25,13 +18,12 @@ const Header = () => {
     };
 
     useEffect(() => {
-        setAcessoPgUsuario(usuarioPossuiPermissao('buscar_usuario'));
-        setAcessoPgCategorias(usuarioPossuiPermissao('buscar_categoria'));
+        setAcessoPgUsuario(context.usuarioPossuiPermissao('buscar_usuario'));
 
         const atualizarTimer = () => {
             const tempoRestanteMs = (context.sessao.expiracao * 1000) - Date.now();
 
-            tempoRestanteMs <= 0 ? setTempoSessaoRestante(0) : setTempoSessaoRestante(tempoRestanteMs);
+            tempoRestanteMs <= 0 ? deslogarUsuario() : setTempoSessaoRestante(tempoRestanteMs);
         };
 
         atualizarTimer();
@@ -49,7 +41,7 @@ const Header = () => {
 
     return (
         <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'lightblue', paddingBottom: '0', paddingTop: '0', marginBottom: '15px' }}>
-            <a className="navbar-brand p-2" style={{ letterSpacing: '1.5px', fontWeight: '600' }} href="#">Blog Educa</a>
+            <Link to="/" className="navbar-brand p-2" style={{ letterSpacing: '1.5px', fontWeight: '600' }}>Blog Educa</Link>
             <button className="navbar-toggler ms-1" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -57,16 +49,11 @@ const Header = () => {
             <div id="menu" className="collapse navbar-collapse">
                 <ul className="navbar-nav me-auto">
                     <li className="nav-item active">
-                        <a className="nav-link" href="#">Página inicial</a>
+                        <Link to="/" className="nav-link">Página inicial</Link>
                     </li>
                     {acessoPgUsuario && (
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Usuários</a>
-                        </li>
-                    )}
-                    {acessoPgCategorias && (
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Categorias</a>
+                            <Link to="/usuarios" className="nav-link">Usuários</Link>
                         </li>
                     )}
                 </ul>
@@ -76,9 +63,6 @@ const Header = () => {
                         <p style={{ marginBottom: '0', fontWeight: '700' }}>Sua sessão expira em {minutos}:{segundos}</p>
                     </div>
                     <div className="d-flex flex-column justify-content-center align-items-center ps-4 pe-2">
-                        <img src={iconeUsuario} 
-                        style={{ width: '25px', height: '25px', cursor: 'pointer', paddingBottom: '5px' }} 
-                        title="Clique para acessar seu perfil" />
                         <img src={iconeLogout} 
                         style={{ width: '25px', height: '25px', cursor: 'pointer', paddingLeft: '5px' }} 
                         title="Clique para sair do sistema" onClick={() => { deslogarUsuario(); }}/>

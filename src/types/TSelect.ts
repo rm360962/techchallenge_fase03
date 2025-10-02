@@ -4,6 +4,7 @@ export type TSelectItem = {
 };
 
 export type TSelectProps = {
+    valor: string,
     itens: TSelectItem[],
     onChange: Function,
     mensagemPadrao: string,

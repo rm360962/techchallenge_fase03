@@ -1,16 +1,17 @@
-import Login from "./pages/Login.js";
-import Home from "./pages/Home.js";
-import ProtectedRoute from "./components/ProtectedRoute.js";
-import Alert from "./components/Alert.js";
+import Login from "./pages/Login.tsx";
+import Home from "./pages/Home.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import Alert from "./components/Alert.tsx";
 import imagemFundo from './assets/bg-ia-generated.png';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { TAlertProps } from "./types/TAlert.js";
-import { TSession } from "./types/TSession.js";
-import { SessionContext } from "./sessionContext.js";
-import Usuario from "./pages/Usuario.js";
-import EditarUsuario from "./pages/EditarUsuario.js";
-import EditarPostagem from "./pages/EditarPostagem.js";
+import { TAlertProps } from "./types/TAlert.ts";
+import { TSession } from "./types/TSession.ts";
+import { SessionContext } from "./sessionContext.ts";
+import Usuario from "./pages/Usuario.tsx";
+import EditarUsuario from "./pages/EditarUsuario.tsx";
+import EditarPostagem from "./pages/EditarPostagem.tsx";
+import PaginaNaoEncontrada from "./pages/404.tsx";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
@@ -115,6 +116,7 @@ function App() {
                 <EditarUsuario />
               </ProtectedRoute>}
             />
+            <Route path="*" element={<PaginaNaoEncontrada />} />
           </Routes>
         </BrowserRouter>
       </div>

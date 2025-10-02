@@ -143,4 +143,21 @@ export class UsuarioService {
             ]
         }
     };
+
+    removerUsuario = async (id : number) : Promise<boolean> => {
+        try {
+            const resposta = await conexaoApi({
+                method: 'delete',
+                url: `/users/${id}`,
+                headers: {
+                    token: this.context.sessao.token
+                },
+            });
+
+            return resposta.status === 200;
+        } catch(erro) {
+            console.log('Erro ao remover o usuario', erro);
+            return false;
+        }
+    }
 };

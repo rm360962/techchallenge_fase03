@@ -41,7 +41,7 @@ const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
                             <button 
                                 style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0'}}
                                 title="Clique para remover a postagem"
-                                onClick={() => {if(remover) remover(postagem);}}>
+                                onClick={() => {if(remover) remover(postagem.id);}}>
                                     &#10060;
                             </button>
                         </div>

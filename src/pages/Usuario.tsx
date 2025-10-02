@@ -10,6 +10,8 @@ import Button from "../components/Button";
 import Select from "../components/Select";
 import { TSelectItem } from "../types/TSelect";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../components/ConfirmModal";
+import { TCategoriaUsuario } from "../types/TSession";
 
 const Usuario = () => {
     const usuarioBuscaInicial: TBuscaUsuario = {
@@ -23,12 +25,14 @@ const Usuario = () => {
 
     const [buscaUsuario, setBuscaUsuario] = useState(usuarioBuscaInicial);
     const [usuarios, setUsuarios] = useState([] as TUsuario[]);
+    const [categorias, setCategorias] = useState([] as TSelectItem[]);
+    const [idUsuarioRemocao, setIdUsuarioRemocao] = useState<number | null>(null);
+    const [remover, setRemover] = useState(false);
 
     const usuarioService = new UsuarioService();
     const context = useContext(SessionContext);
     const nagivator = useNavigate();
-    const categorias : TSelectItem[] = [];
-    const SimNao : TSelectItem[] = [{
+    const SimNao: TSelectItem[] = [{
         label: 'Sim',
         valor: true
     }, {
@@ -37,6 +41,7 @@ const Usuario = () => {
     }];
 
     useEffect(() => {
+        buscarCategoriasUsuario();
         pesquisar();
     }, [])
 
@@ -52,7 +57,7 @@ const Usuario = () => {
             return;
         }
 
-        if(resultadoBusca.length === 0) {
+        if (resultadoBusca.length === 0) {
             console.log('NADA ENCONTRADO NA PESQUISA', buscaUsuario)
             context.adcionarAlerta({
                 tipo: TipoAlerta.Info,
@@ -63,12 +68,60 @@ const Usuario = () => {
         setUsuarios(resultadoBusca);
     };
 
+    const buscarCategoriasUsuario = async () => {
+        const { erro, categorias: categoriasEncontradas } = await usuarioService.buscarCategoriasUsuario();
+
+        if (erro) {
+            context.adcionarAlerta({
+                tipo: TipoAlerta.Erro,
+                mensagem: erro,
+            });
+            return;
+        }
+
+        const categoriasSelectItem: TSelectItem[] = [];
+        categoriasEncontradas.map((categoria: TCategoriaUsuario) => {
+            categoriasSelectItem.push({
+                label: categoria.nome,
+                valor: categoria.id
+            });
+        });
+
+        setCategorias(categoriasSelectItem);
+    };
+
     const limparFiltros = () => {
         setBuscaUsuario(usuarioBuscaInicial);
     };
 
-    const editarUsuario = (id : number) => {
+    const editarUsuario = (id: number) => {
         nagivator(`/usuarios/editar/${id}`);
+    };
+
+    const confirmarRemocao = (id: number) => {
+        setIdUsuarioRemocao(id);
+        setRemover(true);
+    };
+
+    const removerUsuario = async () => {
+        if (idUsuarioRemocao == null) return;
+
+        const usuarioRemovido = await usuarioService.removerUsuario(idUsuarioRemocao);
+
+        if (!usuarioRemovido) {
+            context.adcionarAlerta({
+                tipo: TipoAlerta.Erro,
+                mensagem: 'Erro ao inativar o usuário'
+            });
+            return;
+        }
+
+        context.adcionarAlerta({
+            tipo: TipoAlerta.Sucesso,
+            mensagem: 'Usuário removido com sucesso',
+        });
+
+        await pesquisar();
     };
 
     return (
@@ -115,6 +168,7 @@ const Usuario = () => {
                     <div className='form-group mb-3'>
                         <label className='fw-semibold'>Categoria</label>
                         <Select
+                            valor={buscaUsuario.categoriaId}
                             titulo="Selecione a categoria a ser buscada"
                             mensagemPadrao="Selecione a categoria"
                             itens={categorias}
@@ -123,10 +177,11 @@ const Usuario = () => {
                     <div className='form-group mb-3'>
                         <label className='fw-semibold'>Ativo</label>
                         <Select
+                            valor={buscaUsuario.ativo || ''}
                             titulo="Selecione se usuário a ser buscado está ativo ou não"
                             mensagemPadrao="Selecione o ativo"
                             itens={SimNao}
-                            onChange={(e: any) => { setBuscaUsuario({ ...buscaUsuario, categoriaId: e.target.value }) }} />
+                            onChange={(e: any) => { setBuscaUsuario({ ...buscaUsuario, ativo: e.target.value }) }} />
                     </div>
                 </SearchFilter>
                 <div className="container-fluid">
@@ -136,7 +191,7 @@ const Usuario = () => {
                             tipo="button"
                             titulo="Clique para cadastrar um novo usuário no sistema"
                             class="primary"
-                            onClick={() => { nagivator(`/usuarios/editar/null`)}}
+                            onClick={() => { nagivator(`/usuarios/editar/null`) }}
                         >
                             Novo usuário
                         </Button>
@@ -166,13 +221,14 @@ const Usuario = () => {
                                                 <button
                                                     style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
                                                     title="Clique para editar o usuário"
-                                                    onClick={(e) => { editarUsuario(usuario.id)}}
+                                                    onClick={(e) => { editarUsuario(usuario.id) }}
                                                 >
                                                     &#128221;
                                                 </button>
                                                 <button
                                                     style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
                                                     title="Clique para inativar o usuário"
+                                                    onClick={() => { confirmarRemocao(usuario.id) }}
                                                 >
                                                     &#10060;
                                                 </button>
@@ -194,6 +250,12 @@ const Usuario = () => {
                         </table>
                     </div>
                 </div>
+                <ConfirmModal
+                    visivel={remover}
+                    setVisivel={setRemover}
+                    titulo="Inativar usuário"
+                    pergunta="Confirma a inativação do usuário?"
+                    acao={removerUsuario} />
             </div>
         </>
     );
