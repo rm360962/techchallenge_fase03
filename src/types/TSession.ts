@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type TSession = {
     usuarioLogado: TUsuarioLogado,
     expiracao: number,
@@ -20,4 +22,9 @@ export type TCategoriaUsuario = {
 export type TLoginUsuario = {
     usuario: string,
     senha: string,
+};
+
+export type TRotaProtegidaProps = {
+    children: ReactNode,
+    permissoes: string[],
 };

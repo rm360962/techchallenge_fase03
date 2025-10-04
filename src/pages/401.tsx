@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
-const PaginaNaoEncontrada = () => {
+const AcessoNaoPermitido = () => {
 	return (
         <div className="d-flex align-items-center justify-content-center vh-100">
             <div className="text-center">
-                <h1 className="display-1 fw-bold">404</h1>
+                <h1 className="display-1 fw-bold">401</h1>
                 <p className="lead">
-                    A página que você está procurando não existe.
+                    Você não possui permissão para acesso a página
                 </p>
                 <Link to="/postagens" className="btn btn-primary">Voltar para o início</Link>
             </div>
@@ -14,4 +14,4 @@ const PaginaNaoEncontrada = () => {
     );
 };
 
-export default PaginaNaoEncontrada;
+export default AcessoNaoPermitido;

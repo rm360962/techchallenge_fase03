@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { TCard } from "../types/TCard";
 import { SessionContext } from "../sessionContext";
+import { Link } from "react-router-dom";
 
 const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
     const context = useContext(SessionContext);
@@ -11,7 +12,7 @@ const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
     }, []);
 
     return (
-        <div className="card" style={{ width: '20rem', height: '19rem' }}>
+        <div className="card" style={{ width: '20rem' }}>
             <div className="card-body">
                 <h5 className="card-title">{postagem.titulo}</h5>
                 <p className="card-text" style={{ minHeight: '4rem' }}>{postagem.descricao.length > 50 ? `${postagem.descricao.substring(0, 50)}...` : postagem.descricao}</p>
@@ -47,7 +48,7 @@ const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
                         </div>
                     </div>
                 </>) : (
-                    <a title="Clique para continuar lendo a postagem">Continuar lendo</a>
+                    <Link to={`/postagens/visualizar/${postagem.id}`} className="nav-link" style={{ color: 'blue'}}>Continuar lendo</Link>
                 )}
             </div>
         </div>

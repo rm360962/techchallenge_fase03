@@ -159,7 +159,7 @@ const EditarPostagem = () => {
                                     tipo="button"
                                     class="secondary"
                                     desabilitado={carregando}
-                                    onClick={() => { navigator('/') }}>
+                                    onClick={() => { navigator('/postagens') }}>
                                     Voltar
                                 </Button>
                             </div>

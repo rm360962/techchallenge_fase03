@@ -23,13 +23,14 @@ const SearchFilter = ({ children, pesquisar, limpar }: TSearchFilter) => {
 
 	const estiloBarraFiltros = {
 		width: expandida ? '250px' : '0',
-		overflow: 'hidden'
+		overflow: 'hidden',
+		marginBottom: '10px'
 	};
 
 	return (
 		<>
 			<div className="d-flex">
-				<div className={`d-flex flex-column flex-shrink-0 bg-light mt-2 border ${expandida ? 'p-3' : ''}`}
+				<div className={`d-flex flex-column flex-shrink-0 bg-light border ${expandida ? 'p-3' : ''}`}
 					style={estiloBarraFiltros}>
 					<span className="fs-6 fw-semibold">
 						Filtros de pesquisa
@@ -60,7 +61,7 @@ const SearchFilter = ({ children, pesquisar, limpar }: TSearchFilter) => {
 						</form>
 					</div>
 				</div>
-				<button className="p-3 mt-2 d-flex align-items-center justify-content-center fw-bold" onClick={alterarBarraFiltros} style={{ width: '20px', backgroundColor: 'lightblue', border: 'none' }}>
+				<button className="p-3 d-flex align-items-center justify-content-center fw-bold" onClick={alterarBarraFiltros} style={{ width: '20px', backgroundColor: 'lightblue', border: 'none', marginBottom: '10px' }}>
 					{expandida ? '>>' : '<<'}
 				</button>
 			</div>

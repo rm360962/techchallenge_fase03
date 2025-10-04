@@ -98,8 +98,7 @@ const Home = () => {
 	};
 
 	const visualizarPostagem = (postagem: TPostagem) => {
-		setPostagem(postagem);
-		setVisualizar(true);
+		navigator(`/postagens/visualizar/${postagem.id}`);
 	};
 
 	const editarPostagem = (postagem: TPostagem) => {
@@ -109,7 +108,7 @@ const Home = () => {
 	return (
 		<>
 			<Header />
-			<div id="pesquisa" className='d-flex' style={{ overflowY: 'scroll' }}>
+			<div id="pesquisa" className='d-flex'>
 				<SearchFilter pesquisar={pesquisar} limpar={limparFiltros}>
 					<div className='form-group mb-3'>
 						<label className='fw-semibold'>Código</label>
@@ -164,10 +163,12 @@ const Home = () => {
 							onChange={(e: any) => { setBuscaPostagem({ ...buscaPostagem, dataInclusaoFim: e.target.value}); }} />
 					</div>
 				</SearchFilter>
-				<div className="container-fluid">
+				<div className="container-fluid" style={{ paddingLeft: '0' , height: '700px', overflowY: 'scroll'}}>
 					<div className='d-flex align-items-center justify-content-between'>
 						<p className="h5 ps-4 fw-semibold" style={{ letterSpacing: '1px' }}>&#128240; Postagens encontradas</p>
-						<Button tipo='button' class='primary' onClick={(e: any) => { navigator('/postagens/editar/null')}}>Nova postagem</Button>
+						{ context.usuarioPossuiPermissao('cadastrar_postagem') && (
+							<Button tipo='button' class='primary' onClick={(e: any) => { navigator('/postagens/editar/null')}}>Nova postagem</Button>
+						)}
 					</div>
 					<div className="row g-1">
 						{postagens.map(postagem => (

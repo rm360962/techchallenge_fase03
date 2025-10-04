@@ -12,6 +12,8 @@ import Usuario from "./pages/Usuario.tsx";
 import EditarUsuario from "./pages/EditarUsuario.tsx";
 import EditarPostagem from "./pages/EditarPostagem.tsx";
 import PaginaNaoEncontrada from "./pages/404.tsx";
+import AcessoNaoPermitido from "./pages/401.tsx";
+import VisualizarPostagem from "./pages/VisualizarPostagem.tsx";
 
 function App() {
   const [sessao, setSessao] = useState({} as TSession);
@@ -23,8 +25,8 @@ function App() {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    overflow: 'hidden',
     padding: '0',
-    overflowY: 'scroll'
   };
 
   useEffect(() => {
@@ -96,27 +98,33 @@ function App() {
             <Route path="/login" element={
               <Login />}
             />
-            <Route path="/" element={
-              <ProtectedRoute>
+            <Route path="/postagens" element={
+              <ProtectedRoute permissoes={['buscar_postagem']}>
                 <Home />
               </ProtectedRoute>}
             />
             <Route path="/postagens/editar/:id" element={
-              <ProtectedRoute>
+              <ProtectedRoute permissoes={['editar_postagem', 'cadastrar_postagem']}>
                 <EditarPostagem />
               </ProtectedRoute>}
             />
+            <Route path="/postagens/visualizar/:id" element={
+              <ProtectedRoute permissoes={['buscar_postagem']}>
+                <VisualizarPostagem />
+              </ProtectedRoute>}
+            />
             <Route path="/usuarios" element={
-              <ProtectedRoute>
+              <ProtectedRoute permissoes={['buscar_usuario']}>
                 <Usuario />
               </ProtectedRoute>}
             />
             <Route path="/usuarios/editar/:id" element={
-              <ProtectedRoute>
+              <ProtectedRoute permissoes={['cadastrar_usuario', 'editar_usuario']}>
                 <EditarUsuario />
               </ProtectedRoute>}
             />
             <Route path="*" element={<PaginaNaoEncontrada />} />
+            <Route path="/401" element={<AcessoNaoPermitido />} />
           </Routes>
         </BrowserRouter>
       </div>

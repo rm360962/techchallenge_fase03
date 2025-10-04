@@ -50,7 +50,7 @@ export class PostagemService {
 
             return {
                 erro: resposta.status === 200 ? null : 'Erro ao buscar a postagem',
-                postagem: resposta.status === 200 ? resposta.data[0] : {}
+                postagem: resposta.status === 200 ? resposta.data : {}
             };
         } catch (erro) {
             console.log('Erro buscar a postagem por id', erro);
@@ -125,7 +125,7 @@ export class PostagemService {
         }
     };
 
-    excluirPostagem = async (id: number) : Promise<boolean> => {
+    removerPostagem = async (id: number) : Promise<boolean> => {
         try {
             const resposta = await conexaoApi({
                 method: 'delete',
