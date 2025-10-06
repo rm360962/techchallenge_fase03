@@ -14,10 +14,10 @@ const Card = ({ postagem, visualizar, remover, editar} : TCard) => {
     return (
         <div className="card" style={{ width: '20rem' }}>
             <div className="card-body">
-                <h5 className="card-title">{postagem.titulo}</h5>
+                <h5 className="card-title">{postagem.id} - {postagem.titulo}</h5>
                 <p className="card-text" style={{ minHeight: '4rem' }}>{postagem.descricao.length > 50 ? `${postagem.descricao.substring(0, 50)}...` : postagem.descricao}</p>
                 <hr />
-                <p className="mb-1"><strong className="fw-semibold">Postado pelo usuário {postagem.usuarioInclusao}</strong></p>
+                <p className="mb-1"><strong className="fw-semibold">Postado pelo usuário {postagem.usuario.nome}</strong></p>
                 <p className="mb-1"><strong className="fw-semibold">Data de criação </strong> {postagem.dataInclusao.replace(' ', ' as ')}</p>
                 {edicao ? (<>
                     <hr />

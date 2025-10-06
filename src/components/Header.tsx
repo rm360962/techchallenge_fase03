@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
     const [tempoSessaoRestante, setTempoSessaoRestante] = useState(0);
     const [acessoPgUsuario, setAcessoPgUsuario] = useState(false);
+    const [mostrarMenu, setMostrarMenu] = useState(false);
     const context = useContext(SessionContext);
     const navigator = useNavigate();
 
@@ -41,11 +42,18 @@ const Header = () => {
     return (
         <nav className="navbar navbar-expand-md" style={{ backgroundColor: 'lightblue', paddingBottom: '0', paddingTop: '0', marginBottom: '15px' }}>
             <Link to="/postagens" className="navbar-brand p-2" style={{ letterSpacing: '1.5px', fontWeight: '600' }}>Blog Educa</Link>
-            <button className="navbar-toggler ms-1" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+            <button 
+                className="navbar-toggler ms-1" 
+                type="button" 
+                data-toggle="collapse" 
+                data-target="#menu" 
+                aria-controls="menu" 
+                aria-expanded={mostrarMenu}
+                onClick={() => { setMostrarMenu(!mostrarMenu); }}>
                 <span className="navbar-toggler-icon"></span>
             </button>
 
-            <div id="menu" className="collapse navbar-collapse">
+            <div id="menu" className={`collapse navbar-collapse ${mostrarMenu ? 'show' : ''}`}>
                 <ul className="navbar-nav me-auto">
                     <li className="nav-item active">
                         <Link to="/postagens" className="nav-link">Página inicial</Link>

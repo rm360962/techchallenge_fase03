@@ -144,7 +144,7 @@ export class UsuarioService {
         }
     };
 
-    removerUsuario = async (id : number) : Promise<boolean> => {
+    removerUsuario = async (id: number): Promise<boolean> => {
         try {
             const resposta = await conexaoApi({
                 method: 'delete',
@@ -155,9 +155,32 @@ export class UsuarioService {
             });
 
             return resposta.status === 200;
-        } catch(erro) {
+        } catch (erro) {
             console.log('Erro ao remover o usuario', erro);
             return false;
         }
-    }
+    };
+
+    buscarProfessores = async () : Promise<{ erro: string | null, usuarios: TUsuario[]}> => {
+        try {
+            const resposta = await conexaoApi({
+                method: 'get',
+                url: `/users/teachers`,
+                headers: {
+                    token: this.context.sessao.token,
+                },
+            });
+
+            return {
+                erro: resposta.status === 200 ? null : 'Erro ao buscar os professores',
+                usuarios: resposta.status == 200 ? resposta.data : []
+            };
+        } catch (erro) {
+            console.log('Erro na busca do usuario por id', erro);
+            return {
+                erro: 'Erro ao buscar o usuário',
+                usuarios: []
+            };
+        }
+    };
 };

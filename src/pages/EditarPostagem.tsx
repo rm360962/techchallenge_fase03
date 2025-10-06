@@ -142,7 +142,7 @@ const EditarPostagem = () => {
                                         valor={postagem.descricao}
                                         onChange={(e: any) => setPostagem({ ...postagem, descricao: e.target.value })}
                                         obrigatorio={true}
-                                        style={{ width: '40vw' }} />
+                                        style={{ width: '80vw', height: '40vh' }} />
                                     <div className="invalid-feedback">
                                         A descrição é obrigatória
                                     </div>

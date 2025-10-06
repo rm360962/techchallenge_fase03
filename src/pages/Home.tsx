@@ -12,6 +12,8 @@ import ViewModal from '../components/ViewModal.tsx';
 import ConfirmModal from '../components/ConfirmModal.tsx';
 import Button from '../components/Button.tsx';
 import { useNavigate } from 'react-router-dom';
+import { UsuarioService } from '../service/usuario.service.ts';
+import { TSelectItem } from '../types/TSelect.ts';
 
 const Home = () => {
 	const buscaPostagemInicial : TBuscaPostagem = {
@@ -27,29 +29,21 @@ const Home = () => {
 	const [postagens, setPostagens] = useState([] as TPostagem[]);
 	const [postagem, setPostagem] = useState({} as TPostagem);
 	const [idRemocaoPostagem, setIdRemocaoPostagem] = useState<number | null>(null);
+	const [professores, setProfessores] = useState([] as TSelectItem[]);
 
 	const [visualizar, setVisualizar] = useState(false);
 	const [remover, setRemover] = useState(false);
 
 	const postagemService = new PostagemService();
+	const usuarioService = new UsuarioService();
 	const context = useContext(SessionContext);
 	const navigator = useNavigate();
 
-	const teste = [
-		{
-			valor: 1,
-			label: "teste"
-		},
-		{
-			valor: 2,
-			label: "exemplo"
-		}
-	];
-
 	useEffect(() => {
 		pesquisar();
+		buscarProfessores();
 	}, []);
-
+	
 	const pesquisar = async () => {
 		const { erro, postagens: listaPostagens } =
 			await postagemService.buscarPostagens(buscaPostagem);
@@ -71,6 +65,29 @@ const Home = () => {
 		}
 
 		setPostagens(listaPostagens);
+	};
+
+	const buscarProfessores = async () => {
+		const { erro, usuarios: professores } = await usuarioService.buscarProfessores();
+
+		if (erro) {
+			context.adcionarAlerta({
+				tipo: TipoAlerta.Erro,
+				mensagem: erro
+			});
+
+			return;
+		}
+
+		const professoresSelectItem : TSelectItem[] = [];
+		professores.map((item) => {
+			professoresSelectItem.push({
+				label: item.nome,
+				valor: item.id
+			});
+		});
+
+		setProfessores(professoresSelectItem);
 	};
 
 	const limparFiltros = () => {
@@ -115,6 +132,7 @@ const Home = () => {
 						<Input
 							titulo="Preencha com código da postagem a ser buscada"
 							placeholder="Código da postagem"
+							tipo="number"
 							valor={buscaPostagem.id}
 							obrigatorio={false}
 							onChange={(e: any) => { setBuscaPostagem({ ...buscaPostagem, id: e.target.value}); }} />
@@ -143,7 +161,7 @@ const Home = () => {
 							valor={buscaPostagem.usuarioId}
 							titulo="Selecione o professor a ser buscado"
 							mensagemPadrao="Selecione o professor"
-							itens={teste}
+							itens={professores}
 							onChange={(e: any) => { setBuscaPostagem({ ...buscaPostagem, usuarioId: e.target.value}); }} />
 					</div>
 					<div className='form-group mb-4'>

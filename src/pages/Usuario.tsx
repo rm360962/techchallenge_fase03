@@ -134,6 +134,7 @@ const Usuario = () => {
                         <Input
                             titulo="Preencha com código do usuário ser buscado"
                             placeholder="Digite o código do usuário"
+                            tipo="number"
                             valor={buscaUsuario.id}
                             obrigatorio={false}
                             onChange={(e: any) => { setBuscaUsuario({ ...buscaUsuario, id: e.target.value }) }} />
@@ -184,9 +185,9 @@ const Usuario = () => {
                             onChange={(e: any) => { setBuscaUsuario({ ...buscaUsuario, ativo: e.target.value }) }} />
                     </div>
                 </SearchFilter>
-                <div className="container-fluid">
+                <div className="container-fluid" style={{ paddingLeft: '0', height: '700px', overflowY: 'scroll' }}>
                     <div className='d-flex align-items-center justify-content-between mb-2'>
-                        <p className="h5 fw-semibold" style={{ letterSpacing: '1px', marginBottom: '0' }}>&#129489; Usuários cadastrados</p>
+                        <p className="ps-4 h5 fw-semibold" style={{ letterSpacing: '1px', marginBottom: '0' }}>&#129489; Usuários cadastrados</p>
                         <Button
                             tipo="button"
                             titulo="Clique para cadastrar um novo usuário no sistema"
@@ -196,7 +197,7 @@ const Usuario = () => {
                             Novo usuário
                         </Button>
                     </div>
-                    <div>
+                    <div className="ps-4 table-responsive">
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
@@ -225,13 +226,15 @@ const Usuario = () => {
                                                 >
                                                     &#128221;
                                                 </button>
-                                                <button
-                                                    style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
-                                                    title="Clique para inativar o usuário"
-                                                    onClick={() => { confirmarRemocao(usuario.id) }}
-                                                >
-                                                    &#10060;
-                                                </button>
+                                                {usuario.ativo && (
+                                                    <button
+                                                        style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
+                                                        title="Clique para inativar o usuário"
+                                                        onClick={() => { confirmarRemocao(usuario.id) }}
+                                                    >
+                                                        &#10060;
+                                                    </button>
+                                                )}
                                             </td>
                                             <td>{usuario.id}</td>
                                             <td>{usuario.nome}</td>
