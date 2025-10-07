@@ -8,7 +8,6 @@ import { TBuscaPostagem, TPostagem } from '../types/TPostagem.ts';
 import { SessionContext } from '../sessionContext.ts';
 import { TipoAlerta } from '../types/TAlert.ts';
 import Card from '../components/Card.tsx';
-import ViewModal from '../components/ViewModal.tsx';
 import ConfirmModal from '../components/ConfirmModal.tsx';
 import Button from '../components/Button.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -201,12 +200,6 @@ const Home = () => {
 						))}
 					</div>
 				</div>
-				<ViewModal
-					titulo={postagem.titulo}
-					descricao={postagem.descricao}
-					visivel={visualizar}
-					setVisivel={setVisualizar}
-				/>
 				<ConfirmModal
 					titulo="Remover postagem"
 					pergunta="Confirma a remoção da postagem?"

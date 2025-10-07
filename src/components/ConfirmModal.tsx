@@ -14,10 +14,6 @@ const ConfirmModal = ({ visivel, setVisivel, titulo, pergunta, acao } : TConfirm
         setVisivel(false);
     };
 
-    const estiloBotao = {
-        minWidth: '50px',
-    };
-
     return (
         <>
             {visivel && <div className="modal-backdrop fade show"></div>}

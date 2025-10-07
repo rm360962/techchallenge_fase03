@@ -219,13 +219,15 @@ const Usuario = () => {
                                     return (
                                         <tr key={usuario.id}>
                                             <td>
-                                                <button
-                                                    style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
-                                                    title="Clique para editar o usuário"
-                                                    onClick={(e) => { editarUsuario(usuario.id) }}
-                                                >
-                                                    &#128221;
-                                                </button>
+                                                {usuario.ativo && (
+                                                    <button
+                                                        style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
+                                                        title="Clique para editar o usuário"
+                                                        onClick={(e) => { editarUsuario(usuario.id) }}
+                                                    >
+                                                        &#128221;
+                                                    </button>
+                                                )}
                                                 {usuario.ativo && (
                                                     <button
                                                         style={{ border: 'none', backgroundColor: 'white', fontSize: '19px', padding: '0' }}
