@@ -1,12 +1,50 @@
-# React + Vite
+# Blog Educa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto desenvolvido para a terceira fase da Pós-Tech FIAP.
 
-Currently, two official plugins are available:
+## Informações do projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Aluno: Henrique Jardel Timoteo
+RM: rm360962
 
-## Expanding the ESLint configuration
+GitHub do projeto frontend: https://github.com/rm360962/techchallenge_fase03
+GitHub do projeto backend:  https://github.com/rm360962/techchallenge_fase02
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Usuário cadastrado para teste:
+
+Login: Sistema
+Senha: 12345678
+
+## Arquitetura utilizada
+
+A arquitetura adotada neste projeto foi a arquitetura baseada em componentes, que é uma abordagem de desenvolvimento de software que estrutura o sistema como um conjunto de unidades independentes, reutilizáveis e substituíveis.
+
+## Requisitos mínimos
+
+- NodeJs na versão 22 ou maior
+
+## Variáveis de ambiente do projeto de backend
+
+Varíaveis de ambiente para executar o projeto localmente.
+
+- DATABASE_USER=postgres
+- DATABASE_HOST=localhost
+- DATABASE=postgres
+- DATABASE_PASSWORD=1234
+- DATABASE_PORT=5432
+- JWT_SECRET=dd56e3b80b0e23fb78b161078a6d8ddc
+
+## Comandos do backend
+
+- npm install - Instala todas as dependências da aplicação
+- npm run dev - Roda a API(rotas) modo dev
+- npm start - Roda a API(rotas) em modo produção
+- npm run build - Faz o build da aplicação para rodar em produção
+- npm run test - Roda os testes 
+- docker compose -f db-dev.yml up - Executa o banco de dados
+- docker compose -f db-dev.yml down -v - Limpa os dados do banco
+
+## Comandos do frontend
+
+- npm install - Instala todas as dependências da aplicação
+- npm run dev - Roda a API(rotas) modo dev
